@@ -2,8 +2,8 @@
 
 > **全学科 Nature / Science / Cell 正刊及子刊论文主图灵感画廊（2024–2026 Open Access · 3,000+ 主图）**
 
-在线浏览网站：**https://lian-xiao.github.io/ncs-paper-figure-gallery/**  
-GitHub 仓库：**https://github.com/lian-xiao/ncs-paper-figure-gallery**
+在线浏览网站：**https://daydayup-xq.github.io/ncs-paper-figure-gallery/**  
+GitHub 仓库：**https://github.com/daydayup-xq/ncs-paper-figure-gallery**
 
 一个可直接部署到 **GitHub Pages** 的纯静态学术配图灵感网站：收录 **Nature、Science、Cell 三大正刊及其核心大子刊、综合/小子刊** 最近三年（**2024–2026**）的 **Open Access** 论文主图（`Figure 1` 与 `Graphical Abstract`），按**学科方向**、**出版体系**、**期刊级别**与**主图视觉类型**多维筛选，并自动提取每张顶刊主图的实测配色色板（支持一键复制 HEX / Python / R / CSS 与 BibTeX）。
 
@@ -43,8 +43,8 @@ python -X utf8 scripts/validate_gallery.py
 
 ## GitHub Pages 自动部署
 
-- 仓库地址：`https://github.com/lian-xiao/ncs-paper-figure-gallery`
-- 在线访问：`https://lian-xiao.github.io/ncs-paper-figure-gallery/`
+- 仓库地址：`https://github.com/daydayup-xq/ncs-paper-figure-gallery`
+- 在线访问：`https://daydayup-xq.github.io/ncs-paper-figure-gallery/`
 - 内置工作流：
   - `.github/workflows/deploy-pages.yml`：每次推送到 `main` 分支自动发布静态站点。
   - `.github/workflows/update-figures.yml`：每周自动（或手动触发）增量抓取最新 OA 主图并提交更新。
