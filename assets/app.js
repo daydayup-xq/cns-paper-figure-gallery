@@ -49,6 +49,7 @@
     langToggle: document.getElementById("lang-toggle"),
     themeToggle: document.getElementById("theme-toggle"),
     paletteStudioBtn: document.getElementById("palette-studio-btn"),
+    supportBtn: document.getElementById("support-btn"),
     footerUpdated: document.getElementById("footer-updated"),
     toast: document.getElementById("toast"),
     lb: document.getElementById("lightbox"),
@@ -83,6 +84,9 @@
     pmBackdrop: document.getElementById("pm-backdrop"),
     pmClose: document.getElementById("pm-close"),
     pmGrid: document.getElementById("pm-grid"),
+    sm: document.getElementById("support-modal"),
+    smBackdrop: document.getElementById("sm-backdrop"),
+    smClose: document.getElementById("sm-close"),
   };
 
   function t(key) {
@@ -700,6 +704,11 @@
   els.paletteStudioBtn.addEventListener("click", openPaletteStudio);
   els.pmClose.addEventListener("click", () => (els.pm.hidden = true));
   els.pmBackdrop.addEventListener("click", () => (els.pm.hidden = true));
+  if (els.supportBtn && els.sm) {
+    els.supportBtn.addEventListener("click", () => (els.sm.hidden = false));
+    if (els.smClose) els.smClose.addEventListener("click", () => (els.sm.hidden = true));
+    if (els.smBackdrop) els.smBackdrop.addEventListener("click", () => (els.sm.hidden = true));
+  }
 
   document.addEventListener("keydown", (e) => {
     if (!els.lb.hidden) {
@@ -708,6 +717,8 @@
       else if (e.key === "ArrowRight" && state.lbIndex + 1 < state.filtered.length) openLightbox(state.lbIndex + 1);
     } else if (!els.pm.hidden && e.key === "Escape") {
       els.pm.hidden = true;
+    } else if (els.sm && !els.sm.hidden && e.key === "Escape") {
+      els.sm.hidden = true;
     }
   });
 
