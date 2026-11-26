@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCS Paper Figure Gallery · Nature / Science / Cell 论文主图灵感画廊 (2024–2026 OA)</title>
+<meta name="description" content="全学科 Nature、Science、Cell 正刊及子刊最近三年（2024–2026）Open Access 论文主图（Figure 1 / Graphical Abstract）灵感画廊，支持学科方向、期刊矩阵、视觉类型筛选与顶刊配色一键提取。">
+<meta property="og:title" content="NCS Paper Figure Gallery · 顶刊论文主图灵感画廊">
+<meta property="og:description" content="全学科 Nature / Science / Cell 正刊及子刊 2024–2026 Open Access 论文主图与配色参考画廊。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lian-xiao.github.io/ncs-paper-figure-gallery/">
+<link rel="canonical" href="https://lian-xiao.github.io/ncs-paper-figure-gallery/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f172a'/%3E%3Ccircle cx='34' cy='36' r='13' fill='%23c8102e'/%3E%3Ccircle cx='66' cy='36' r='13' fill='%232563eb'/%3E%3Ccircle cx='50' cy='66' r='13' fill='%23059669'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <span class="dot d-nature" title="Nature"></span>
+          <span class="dot d-science" title="Science"></span>
+          <span class="dot d-cell" title="Cell"></span>
+        </div>
+        <div class="brand-text">
+          <h1>NCS Paper Figure Gallery</h1>
+          <p class="tagline" data-i18n="tagline">全学科 Nature / Science / Cell 正刊与子刊 · 近三年 (2024–2026) Open Access 论文主图灵感画廊</p>
+          <p class="repo-prompt">
+            <span class="oa-badge">100% Open Access · CC BY / PMC OA</span>
+            <span class="sep-dot" aria-hidden="true">·</span>
+            <span data-i18n="repo.sub">含 Figure 1 / Graphical Abstract 原图直链、学科分类与顶刊色板提取</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-actions">
+          <button id="palette-studio-btn" class="action-btn accent-btn" type="button" data-i18n="btn.paletteStudio">🎨 顶刊色卡库</button>
+          <button id="theme-toggle" class="action-btn" type="button" title="切换深浅色 / Toggle Theme">🌙</button>
+          <button id="lang-toggle" class="action-btn" type="button" title="Switch language">中 / EN</button>
+          <a class="action-btn github-btn" href="https://github.com/lian-xiao/ncs-paper-figure-gallery" target="_blank" rel="noopener noreferrer" id="repo-link">
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1.01 1.72 2.65 1.22 3.3.93.1-.73.39-1.22.72-1.5-2.5-.29-5.12-1.25-5.12-5.57 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.09 1.15A10.77 10.77 0 0 1 12 6.15c.96 0 1.92.13 2.82.38 2.14-1.45 3.08-1.15 3.08-1.15.62 1.55.23 2.7.12 2.98.72.79 1.15 1.79 1.15 3.02 0 4.33-2.63 5.28-5.14 5.56.4.35.76 1.03.76 2.08v3.11c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z"/></svg>
+            <span>GitHub</span>
+          </a>
+        </div>
+
+        <div class="hero-stats" id="hero-stats">
+          <span class="stat-pill"><b id="stat-total">0</b>&nbsp;<span data-i18n="stat.total">主图</span></span>
+          <span class="stat-pill nature"><i class="dot-sm"></i><b id="stat-nature">0</b>&nbsp;Nature</span>
+          <span class="stat-pill science"><i class="dot-sm"></i><b id="stat-science">0</b>&nbsp;Science</span>
+          <span class="stat-pill cell"><i class="dot-sm"></i><b id="stat-cell">0</b>&nbsp;Cell</span>
+          <span class="stat-pill flagship">★&nbsp;<b id="stat-flagship">0</b>&nbsp;<span data-i18n="stat.flagship">正刊</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="stickbar">
+  <div class="stickbar-inner">
+    <div class="stick-row">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M21 21l-4.3-4.3M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
+        <input id="search" type="search" data-i18n-ph="search.ph" placeholder="搜论文标题、期刊名、图注关键词、作者或 DOI…" autocomplete="off">
+        <button id="clear-search" class="clear-btn" title="Clear" hidden>×</button>
+      </div>
+
+      <span id="result-count" class="result-count"></span>
+
+      <div class="controls-right">
+        <select id="journal-filter" class="select-ctrl" aria-label="Journal filter">
+          <option value="all">全部期刊 / All Journals</option>
+        </select>
+
+        <div class="sort-wrap">
+          <label for="sort" data-i18n="sort.label">排序</label>
+          <select id="sort" class="select-ctrl">
+            <option value="tier" selected data-i18n="sort.tier">正刊优先 → 年份</option>
+            <option value="year" data-i18n="sort.year">最新年份 → 级别</option>
+            <option value="citations" data-i18n="sort.citations">引用数从高到低</option>
+            <option value="title" data-i18n="sort.title">标题 A–Z</option>
+          </select>
+        </div>
+
+        <button id="density-toggle" class="density-btn" type="button" title="Toggle layout">
+          <span id="density-label" data-i18n="layout.masonry">瀑布流</span>
+        </button>
+
+        <button id="reset-top" class="reset-chip" type="button" hidden data-i18n="btn.reset">重置筛选</button>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-label" data-i18n="fl.family">出版体系</span>
+      <div class="chips" id="family-chips" role="group" aria-label="family filter"></div>
+      <span class="filter-label sep" data-i18n="fl.tier">期刊级别</span>
+      <div class="chips" id="tier-chips" role="group" aria-label="tier filter"></div>
+      <span class="filter-label sep" data-i18n="fl.year">年份</span>
+      <div class="chips" id="year-chips" role="group" aria-label="year filter"></div>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-label" data-i18n="fl.discipline">学科方向</span>
+      <div class="chips" id="discipline-chips" role="group" aria-label="discipline filter"></div>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-label" data-i18n="fl.pattern">主图类型</span>
+      <div class="chips" id="pattern-chips" role="group" aria-label="pattern filter"></div>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <div id="gallery" class="masonry" aria-live="polite"></div>
+  <div id="sentinel" class="sentinel" hidden>
+    <span class="spinner"></span>
+    <span data-i18n="loading">正在加载更多主图…</span>
+  </div>
+  <div id="end-hint" class="end-hint" hidden></div>
+  <div id="empty" class="empty-state" hidden>
+    <div class="empty-emoji">🔬</div>
+    <p data-i18n="empty.text">当前筛选条件下暂无匹配主图，试试放宽年份或切换学科方向。</p>
+    <button id="reset-all" class="primary-btn" type="button" data-i18n="empty.reset">重置全部筛选</button>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <section>
+      <h3 data-i18n="footer.about.h">关于 NCS Paper Figure Gallery</h3>
+      <p data-i18n="footer.about.p">本项目面向全学科科研人员，自动收录 Nature、Science、Cell 正刊及其核心子刊最近三年（2024–2026）Open Access 论文的 Figure 1 与 Graphical Abstract，提供跨学科浏览、构图类型检索与实测色板提取。所有图像均直接引用出版商或 PMC Open Access 官方 CDN 并完整标注 DOI、PMCID 与作者署名。</p>
+      <p class="footer-meta-line">
+        <span data-i18n="footer.updated">数据更新时间：</span><span id="footer-updated">—</span>
+      </p>
+    </section>
+    <section>
+      <h3 data-i18n="footer.legend.h">主图视觉类型说明</h3>
+      <ul class="legend-list">
+        <li data-i18n="legend.ga">🎯 视觉摘要 (Graphical Abstract)：高度凝练全文核心发现的单图总览</li>
+        <li data-i18n="legend.mech">🔬 机理与通路 (Mechanism & Pathway)：分子机制、催化循环或信号通路示意</li>
+        <li data-i18n="legend.pipe">📐 实验与算法流程 (Workflow & Pipeline)：研究路线、系统框架与计算流程</li>
+        <li data-i18n="legend.multi">🧩 多面板综合主图 (Multi-Panel)：a/b/c/d 混合排版的典型顶刊组合主图</li>
+        <li data-i18n="legend.char">🗺️ 结构与空间图谱 (Structure & Atlas)：冷冻电镜、空间组学、材料表征与地图</li>
+      </ul>
+    </section>
+  </div>
+</footer>
+
+<!-- Lightbox Inspector -->
+<div id="lightbox" class="lightbox" hidden>
+  <div class="lightbox-backdrop" id="lb-backdrop"></div>
+  <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+    <button class="lightbox-close" id="lb-close" type="button" aria-label="Close">×</button>
+    <button class="lightbox-nav prev" id="lb-prev" type="button" aria-label="Previous">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+    </button>
+    <button class="lightbox-nav next" id="lb-next" type="button" aria-label="Next">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"></path></svg>
+    </button>
+
+    <div class="lightbox-content">
+      <div class="lightbox-img-wrap" id="lb-img-wrap">
+        <img id="lb-img" src="" alt="">
+        <button id="lb-zoom" class="zoom-toggle" type="button" title="Toggle zoom">🔍 1:1</button>
+      </div>
+
+      <div class="lightbox-meta">
+        <div class="lb-badges">
+          <span id="lb-family" class="badge"></span>
+          <span id="lb-tier" class="badge tier"></span>
+          <span id="lb-year" class="badge year"></span>
+          <span id="lb-discipline" class="badge disc"></span>
+          <span id="lb-pattern" class="badge pat"></span>
+          <span id="lb-license" class="badge lic"></span>
+        </div>
+
+        <h2 id="lb-title"></h2>
+        <p id="lb-journal-meta" class="lb-journal-meta"></p>
+        <p id="lb-authors" class="lb-authors"></p>
+
+        <div class="lb-caption-box">
+          <div class="lb-caption-head">
+            <strong id="lb-fig-label">Fig. 1</strong>
+            <span id="lb-dims" class="lb-dims"></span>
+          </div>
+          <p id="lb-caption" class="lb-caption"></p>
+        </div>
+
+        <div class="lb-palette-box">
+          <div class="lb-palette-head">
+            <span data-i18n="lb.paletteTitle">提取主图配色（点击色块复制 HEX）</span>
+            <div class="palette-export-btns">
+              <button id="lb-copy-py" class="mini-btn" type="button">Python</button>
+              <button id="lb-copy-r" class="mini-btn" type="button">R</button>
+              <button id="lb-copy-css" class="mini-btn" type="button">CSS</button>
+            </div>
+          </div>
+          <div id="lb-palette" class="lb-palette-swatches"></div>
+        </div>
+
+        <div class="lb-actions">
+          <a id="lb-view-image" class="ghost-btn" target="_blank" rel="noopener noreferrer" data-i18n="lb.viewImage">高清原图 ↗</a>
+          <a id="lb-open-paper" class="primary-btn" target="_blank" rel="noopener noreferrer" data-i18n="lb.openPaper">DOI 官网 ↗</a>
+          <a id="lb-open-pmc" class="ghost-btn" target="_blank" rel="noopener noreferrer" data-i18n="lb.openPmc">PMC 阅读 ↗</a>
+          <button id="lb-copy-bib" class="ghost-btn" type="button" data-i18n="lb.copyBib">复制 BibTeX</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Palette Studio Modal -->
+<div id="palette-modal" class="modal" hidden>
+  <div class="modal-backdrop" id="pm-backdrop"></div>
+  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+    <div class="modal-head">
+      <div>
+        <h2 id="pm-title" data-i18n="pm.title">🎨 NCS 顶刊色卡灵感库</h2>
+        <p class="modal-sub" data-i18n="pm.sub">按当前筛选结果实时汇总高频顶刊配色，一键复制可用于 matplotlib / ggplot2 / Illustrator。</p>
+      </div>
+      <button id="pm-close" class="lightbox-close static-close" type="button" aria-label="Close">×</button>
+    </div>
+    <div id="pm-grid" class="pm-grid"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="assets/i18n.js"></script>
+<script src="assets/figures.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

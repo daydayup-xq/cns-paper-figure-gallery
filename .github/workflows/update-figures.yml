@@ -1,0 +1,33 @@
+name: Update OA NCS Figures
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install requests pillow
+      - name: Crawl 2024-2026 OA NCS figures
+        run: python -X utf8 scripts/crawl_ncs_figures.py --merge --target-total 3500 --workers 24
+      - name: Validate dataset
+        run: python -X utf8 scripts/validate_gallery.py
+      - name: Commit updated dataset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/figures.json assets/figures.js
+          git diff --cached --quiet || git commit -m "chore: update OA NCS paper figures"
+          git push
