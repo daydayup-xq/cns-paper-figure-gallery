@@ -2,9 +2,9 @@
 
 <p align="center">🌐 <a href="README.md">简体中文</a> · <strong>English</strong></p>
 
-<img src="docs/banner.svg" alt="NCS Paper Figure Gallery Banner" width="920">
+<img src="docs/banner.svg" alt="NSC Paper Figure Gallery Banner" width="920">
 
-# 🎨 NCS Paper Figure Gallery
+# 🎨 NSC Paper Figure Gallery
 ### Figure 1 & Graphical Abstract inspiration from Nature, Science, and Cell journals · All Disciplines · 2024–2026
 
 ### 💖 Sponsorship and resource support
@@ -63,7 +63,7 @@ Thanks to our sponsor partner supporting scientific writing and figure creation 
     </td>
     <td width="50%" valign="top">
       <a href="#-support-the-author"><strong>💖 Sponsor Slot Available</strong></a><br><br>
-      <sub>Individuals, AI tooling teams, and academic partners are welcome to sponsor compute, API credits, or maintenance so NCS Figure Gallery remains free and continuously updated.</sub><br><br>
+      <sub>Individuals, AI tooling teams, and academic partners are welcome to sponsor compute, API credits, or maintenance so NSC Figure Gallery remains free and continuously updated.</sub><br><br>
       <sub>👉 <a href="#-support-the-author">Buy the author a coffee ☕</a> · <a href="https://daydayup-xq.github.io/ncs-paper-figure-gallery/support.html">Support Page ↗</a></sub>
     </td>
   </tr>
@@ -73,7 +73,7 @@ Thanks to our sponsor partner supporting scientific writing and figure creation 
 
 ---
 
-**NCS Paper Figure Gallery** indexes **5,270 Open Access** main figures (`Figure 1` and `Graphical Abstract`) from the three flagships — **Nature, Science, and Cell** — plus **65 specialty & OA sub-journals** published between **2024 and 2026**. It is designed as a visual layout and color-palette reference for researchers, not a paper ranking. Every card links to the original DOI / PMC article and includes publisher family, journal tier, discipline, visual pattern, and an extracted 5-color palette.
+**NSC Paper Figure Gallery** indexes **5,270 Open Access** main figures (`Figure 1` and `Graphical Abstract`) from the three flagships — **Nature, Science, and Cell** — plus **65 specialty & OA sub-journals** published between **2024 and 2026**. It is designed as a visual layout and color-palette reference for researchers, not a paper ranking. Every card links to the original DOI / PMC article and includes publisher family, journal tier, discipline, visual pattern, and an extracted 5-color palette.
 
 - **Multi-Dimensional Filtering & Sorting**: Filter instantly by `Publisher` (Nature / Science / Cell), `Tier` (★ Flagships / Major Sub-journals / Broad OA), `Year` (2026 / 2025 / 2024), `Discipline` (6 broad domains), `Pattern` (5 visual genres), and any of the 68 indexed journals, sorted flagship-first by default.
 - **Full-Text Search & Shareable URLs**: Search across titles, journals, authors, DOIs, and figure captions (e.g., `CRISPR`, `perovskite`, `diffusion`, `single-cell`). Every filter syncs live into URL query parameters (e.g., `?family=cell&tier=flagship&y=2026`) for easy sharing.
@@ -86,7 +86,7 @@ Thanks to our sponsor partner supporting scientific writing and figure creation 
 
 ## 📊 Dataset Scale
 
-Currently indexing **5,270** Open Access figures from **2024–2026**, covering all **68 / 68** curated NCS flagship and sub-journals:
+Currently indexing **5,270** Open Access figures from **2024–2026**, covering all **68 / 68** curated NSC flagship and sub-journals:
 
 | Publisher Family | 2024 | 2025 | 2026 | Total Figures | ★ Flagships | Major Sub-journals | Broad OA Sub-journals |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -183,7 +183,7 @@ python -X utf8 scripts/validate_gallery.py
 │   ├── figures.js              # Pre-bundled dataset for zero-backend loading
 │   └── wechat-pay.jpg          # Author's WeChat Pay QR code
 ├── data/
-│   ├── journals.json           # 68 curated NCS journal definitions & discipline mappings
+│   ├── journals.json           # 68 curated NSC journal definitions & discipline mappings
 │   └── figures.json            # Authoritative 5,270-figure metadata index
 ├── docs/                       # Hero & sponsor partner SVG banners
 ├── scripts/
@@ -199,8 +199,8 @@ Paper metadata comes from [OpenAlex](https://openalex.org/) and [NCBI E-Utilitie
 ## 📌 Citation
 
 ```bibtex
-@misc{ncs_paper_figure_gallery,
-  title  = {NCS Paper Figure Gallery: An All-Discipline Open Access Gallery of Figure 1 and Graphical Abstracts from Nature, Science, and Cell (2024--2026)},
+@misc{nsc_paper_figure_gallery,
+  title  = {NSC Paper Figure Gallery: An All-Discipline Open Access Gallery of Figure 1 and Graphical Abstracts from Nature, Science, and Cell (2024--2026)},
   year   = {2026},
   url    = {https://github.com/daydayup-xq/ncs-paper-figure-gallery}
 }

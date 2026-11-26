@@ -2,9 +2,9 @@
 
 <p align="center">🌐 <strong>简体中文</strong> · <a href="README.en.md">English</a></p>
 
-<img src="docs/banner.svg" alt="NCS 顶刊论文主图灵感画廊横幅" width="920">
+<img src="docs/banner.svg" alt="NSC 顶刊论文主图灵感画廊横幅" width="920">
 
-# 🎨 NCS 顶刊论文主图灵感画廊
+# 🎨 NSC 顶刊论文主图灵感画廊
 ### Nature · Science · Cell 正刊与子刊论文主图灵感画廊 · 全学科 · 2024–2026
 
 ### 💖 寻求赞助与资源支持
@@ -73,7 +73,7 @@
 
 ---
 
-**NCS 顶刊论文主图灵感画廊**收录 **Nature、Science、Cell 三大正刊及 65 本高影响力学科学专刊** 最近三年（2024–2026）的 **5,270 张 Open Access** 论文主图（`Figure 1` 与 `Graphical Abstract`）。它是面向科研人员的构图与配色灵感索引，而不是论文评价排行。每张卡片直连原文 DOI / PMC，并自动标注出版体系、期刊级别、学科方向、视觉模式与实测 5 色色卡。
+**NSC 顶刊论文主图灵感画廊**收录 **Nature、Science、Cell 三大正刊及 65 本高影响力学科学专刊** 最近三年（2024–2026）的 **5,270 张 Open Access** 论文主图（`Figure 1` 与 `Graphical Abstract`）。它是面向科研人员的构图与配色灵感索引，而不是论文评价排行。每张卡片直连原文 DOI / PMC，并自动标注出版体系、期刊级别、学科方向、视觉模式与实测 5 色色卡。
 
 - **多维筛选与排序**：支持按 `出版体系`（Nature / Science / Cell）、`期刊级别`（★ 三大正刊 / 核心大子刊 / 综合 OA）、`年份`（2026 / 2025 / 2024）、`6 大学科`、`5 类视觉模式` 及 68 本单刊下拉组合筛选，默认正刊优先。
 - **全文检索与 URL 联动**：支持标题、期刊、作者、DOI 及图注关键词检索（如 `CRISPR`、`perovskite`、`diffusion`、`single-cell`），所有筛选条件实时写入 URL（如 `?family=cell&tier=flagship&y=2026`），可直接复制分享给课题组同伴。
@@ -86,7 +86,7 @@
 
 ## 📊 收录规模
 
-当前全库共收录 **5,270 张** 2024–2026 年 Open Access 主图，覆盖配置中的全部 **68 本** NCS 正刊与子刊：
+当前全库共收录 **5,270 张** 2024–2026 年 Open Access 主图，覆盖配置中的全部 **68 本** NSC 正刊与子刊：
 
 | 出版体系 | 2024 | 2025 | 2026 | 主图合计 | ★ 三大正刊 | 核心专刊大子刊 | 综合 / 小子刊 |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -164,7 +164,7 @@ cd ncs-paper-figure-gallery
 # 方式一：本地 HTTP 服务预览（或直接双击打开 index.html）
 python -m http.server 8080
 
-# 方式二：增量采集最近三年 Open Access NCS 主图（需 requests、pillow）
+# 方式二：增量采集最近三年 Open Access NSC 主图（需 requests、pillow）
 python -X utf8 scripts/crawl_ncs_figures.py --merge --target-total 5500 --workers 32
 python -X utf8 scripts/validate_gallery.py
 ```
@@ -183,7 +183,7 @@ python -X utf8 scripts/validate_gallery.py
 │   ├── figures.js              # 前端内联数据集（由 data/figures.json 同步生成）
 │   └── wechat-pay.jpg          # 作者赞赏收款码
 ├── data/
-│   ├── journals.json           # 68 本 NCS 期刊配置与学科映射表
+│   ├── journals.json           # 68 本 NSC 期刊配置与学科映射表
 │   └── figures.json            # 全量 5,270 条 OA 主图权威清单
 ├── docs/                       # 项目横幅与赞助伙伴视觉资产
 ├── scripts/
@@ -199,8 +199,8 @@ python -X utf8 scripts/validate_gallery.py
 ## 📌 引用
 
 ```bibtex
-@misc{ncs_paper_figure_gallery,
-  title  = {NCS Paper Figure Gallery: An All-Discipline Open Access Gallery of Figure 1 and Graphical Abstracts from Nature, Science, and Cell (2024--2026)},
+@misc{nsc_paper_figure_gallery,
+  title  = {NSC Paper Figure Gallery: An All-Discipline Open Access Gallery of Figure 1 and Graphical Abstracts from Nature, Science, and Cell (2024--2026)},
   year   = {2026},
   url    = {https://github.com/daydayup-xq/ncs-paper-figure-gallery}
 }

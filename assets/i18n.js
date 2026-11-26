@@ -34,7 +34,7 @@ window.I18N = {
     "loading": "正在加载更多主图…",
     "empty.text": "当前筛选条件下暂无匹配主图，试试放宽年份或切换学科方向。",
     "empty.reset": "重置全部筛选",
-    "footer.about.h": "关于 NCS Paper Figure Gallery",
+    "footer.about.h": "关于 NSC Paper Figure Gallery",
     "footer.about.p": "本项目面向全学科科研人员，自动收录 Nature、Science、Cell 正刊及其核心子刊最近三年（2024–2026）Open Access 论文的 Figure 1 与 Graphical Abstract，提供跨学科浏览、构图类型检索与实测色板提取。所有图像均直接引用出版商或 PMC Open Access 官方 CDN 并完整标注 DOI、PMCID 与作者署名。",
     "footer.updated": "数据更新时间：",
     "footer.supportLink": "♡ 支持作者 / 赞助页面 ↗",
@@ -51,7 +51,7 @@ window.I18N = {
     "lb.openPaper": "DOI 官网 ↗",
     "lb.openPmc": "PMC 阅读 ↗",
     "lb.copyBib": "复制 BibTeX",
-    "pm.title": "🎨 NCS 顶刊色卡灵感库",
+    "pm.title": "🎨 NSC 顶刊色卡灵感库",
     "pm.sub": "按当前筛选结果实时汇总顶刊实测配色，点击色条复制色号或一键复制 Python / R 代码。",
     "all": "全部",
     "allJournals": "全部期刊",
@@ -74,7 +74,7 @@ window.I18N = {
     "pat.characterization": "🗺️ 结构与空间图谱",
     "copied": "已复制 ",
     "showing": "共 {n} / {total} 张主图",
-    "endHint": "已显示全部 {n} 张符合条件的 NCS Open Access 主图"
+    "endHint": "已显示全部 {n} 张符合条件的 NSC Open Access 主图"
   },
   en: {
     "tagline": "All-Discipline Nature / Science / Cell Flagship & Sub-Journals · 2024–2026 Open Access Figure Gallery",
@@ -111,7 +111,7 @@ window.I18N = {
     "loading": "Loading more figures…",
     "empty.text": "No figures match current filters. Try broadening the year or discipline.",
     "empty.reset": "Reset All Filters",
-    "footer.about.h": "About NCS Paper Figure Gallery",
+    "footer.about.h": "About NSC Paper Figure Gallery",
     "footer.about.p": "An open-source, all-discipline inspiration gallery indexing Open Access Figure 1s and Graphical Abstracts from Nature, Science, Cell and their specialty sub-journals (2024–2026). All assets link directly to official publisher/PMC OA CDNs with full DOI, PMCID, and author attribution.",
     "footer.updated": "Dataset updated: ",
     "footer.supportLink": "♡ Support Author ↗",
@@ -128,8 +128,8 @@ window.I18N = {
     "lb.openPaper": "Publisher DOI ↗",
     "lb.openPmc": "Read on PMC ↗",
     "lb.copyBib": "Copy BibTeX",
-    "pm.title": "🎨 NCS Scientific Color Palette Studio",
-    "pm.sub": "Live color palettes extracted from filtered NCS figures — click any swatch or copy Python/R code.",
+    "pm.title": "🎨 NSC Scientific Color Palette Studio",
+    "pm.sub": "Live color palettes extracted from filtered NSC figures — click any swatch or copy Python/R code.",
     "all": "All",
     "allJournals": "All Journals",
     "family.nature": "Nature Portfolio",
@@ -151,6 +151,6 @@ window.I18N = {
     "pat.characterization": "🗺️ Structure & Atlas",
     "copied": "Copied ",
     "showing": "Showing {n} / {total} figures",
-    "endHint": "Displayed all {n} matching NCS Open Access figures"
+    "endHint": "Displayed all {n} matching NSC Open Access figures"
   }
 };

@@ -1,4 +1,4 @@
-name: Monthly Update OA NCS Figures
+name: Monthly Update OA NSC Figures
 
 on:
   schedule:
@@ -26,7 +26,7 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: pip install requests pillow
-      - name: Crawl latest 3 years of OA NCS figures
+      - name: Crawl latest 3 years of OA NSC figures
         run: python -X utf8 scripts/crawl_ncs_figures.py --merge --target-total 3600 --workers 24
       - name: Validate dataset
         run: python -X utf8 scripts/validate_gallery.py
@@ -35,7 +35,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/figures.json assets/figures.js
-          git diff --cached --quiet || git commit -m "chore: monthly update OA NCS paper figures"
+          git diff --cached --quiet || git commit -m "chore: monthly update OA NSC paper figures"
           git push
 
   deploy:
