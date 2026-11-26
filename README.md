@@ -2,9 +2,7 @@
 
 <p align="center">🌐 <strong>简体中文</strong> · <a href="README.en.md">English</a></p>
 
-<img src="docs/banner.svg" alt="NSC 顶刊论文主图灵感画廊横幅" width="920">
-
-<p align="center"><img src="assets/logo.png" alt="NSC Paper Figure Gallery Logo" width="96"></p>
+<img src="docs/banner.png" alt="NSC 顶刊论文主图灵感画廊横幅" width="920">
 
 # 🎨 NSC 顶刊论文主图灵感画廊
 ### Nature · Science · Cell 正刊与子刊论文主图灵感画廊 · 全学科 · 2024–2026
