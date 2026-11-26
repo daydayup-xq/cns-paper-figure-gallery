@@ -1,4 +1,4 @@
-name: Deploy NSC Paper Figure Gallery to GitHub Pages
+name: Deploy CNS Paper Figure Gallery to GitHub Pages
 
 on:
   push:

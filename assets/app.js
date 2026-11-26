@@ -11,11 +11,12 @@
   let currentColCount = 0;
   let scrollCheckScheduled = false;
 
-  const savedLayout = localStorage.getItem("ncs_layout");
+  const savedLayout = localStorage.getItem("cns_layout") || localStorage.getItem("ncs_layout");
   const state = {
-    lang: localStorage.getItem("ncs_lang") || "zh",
-    theme: localStorage.getItem("ncs_theme") || "light",
+    lang: localStorage.getItem("cns_lang") || localStorage.getItem("ncs_lang") || "zh",
+    theme: localStorage.getItem("cns_theme") || localStorage.getItem("ncs_theme") || "light",
     layout: LAYOUT_MODES.includes(savedLayout) ? savedLayout : "masonry",
+    filtersCollapsed: localStorage.getItem("cns_filters_collapsed") === "1",
     q: "",
     family: "all",
     tier: "all",
@@ -43,14 +44,12 @@
     viewSwitch: document.getElementById("view-switch"),
     densityToggle: document.getElementById("density-toggle"),
     densityLabel: document.getElementById("density-label"),
+    toggleFiltersBtn: document.getElementById("toggle-filters-btn"),
+    filterMatrix: document.getElementById("filter-matrix"),
     resetTop: document.getElementById("reset-top"),
     resetAll: document.getElementById("reset-all"),
-    bentoCards: document.querySelectorAll(".bento-card"),
-    facetSidebar: document.getElementById("facet-sidebar"),
-    drawerBackdrop: document.getElementById("drawer-backdrop"),
-    drawerClose: document.getElementById("drawer-close"),
-    mobileFilterBtn: document.getElementById("mobile-filter-btn"),
-    mobileFilterBadge: document.getElementById("mobile-filter-badge"),
+    quickStatPills: document.querySelectorAll("#hero-stats .stat-pill"),
+    topicChips: document.querySelectorAll(".topic-chip"),
     familyChips: document.getElementById("family-chips"),
     tierChips: document.getElementById("tier-chips"),
     yearChips: document.getElementById("year-chips"),
@@ -150,11 +149,20 @@
     }
   }
 
+  function applyFiltersCollapseState() {
+    if (!els.filterMatrix || !els.toggleFiltersBtn) return;
+    els.filterMatrix.hidden = state.filtersCollapsed;
+    els.toggleFiltersBtn.setAttribute("aria-expanded", String(!state.filtersCollapsed));
+    els.toggleFiltersBtn.textContent = state.filtersCollapsed
+      ? t("btn.expandFilters")
+      : t("btn.collapseFilters");
+  }
+
   function getMasonryColumnCount() {
     const w = window.innerWidth;
     if (w <= 580) return 1;
     if (w <= 920) return 2;
-    if (w <= 1440) return 3;
+    if (w <= 1320) return 3;
     return 4;
   }
 
@@ -186,6 +194,7 @@
       el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph")));
     });
     applyLayout();
+    applyFiltersCollapseState();
   }
 
   function readQueryParams() {
@@ -222,51 +231,41 @@
   }
 
   function updateHeroStats() {
-    const nat = ALL_FIGURES.filter((f) => f.family === "nature");
-    const sci = ALL_FIGURES.filter((f) => f.family === "science");
-    const cell = ALL_FIGURES.filter((f) => f.family === "cell");
+    const cell = ALL_FIGURES.filter((f) => f.family === "cell").length;
+    const nat = ALL_FIGURES.filter((f) => f.family === "nature").length;
+    const sci = ALL_FIGURES.filter((f) => f.family === "science").length;
     const flag = ALL_FIGURES.filter((f) => f.tier === "flagship").length;
-    const journalsCount = new Set(ALL_FIGURES.map((f) => f.journal_slug)).size;
 
     document.getElementById("stat-total").textContent = ALL_FIGURES.length.toLocaleString();
-    document.getElementById("stat-nature").textContent = nat.length.toLocaleString();
-    document.getElementById("stat-science").textContent = sci.length.toLocaleString();
-    document.getElementById("stat-cell").textContent = cell.length.toLocaleString();
+    document.getElementById("stat-cell").textContent = cell.toLocaleString();
+    document.getElementById("stat-nature").textContent = nat.toLocaleString();
+    document.getElementById("stat-science").textContent = sci.toLocaleString();
     document.getElementById("stat-flagship").textContent = flag.toLocaleString();
-
-    const jCountEl = document.getElementById("stat-journals");
-    if (jCountEl) jCountEl.textContent = journalsCount;
-
-    const natSub = document.getElementById("bento-nature-sub");
-    if (natSub) {
-      const nf = nat.filter((f) => f.tier === "flagship").length;
-      const ns = nat.filter((f) => f.tier === "subjournal").length;
-      const no = nat.filter((f) => f.tier === "oa-series").length;
-      natSub.textContent = `Nature ${nf} · Sub ${ns} · Nat Commun ${no}`;
-    }
-    const cellSub = document.getElementById("bento-cell-sub");
-    if (cellSub) {
-      const cf = cell.filter((f) => f.tier === "flagship").length;
-      const cs = cell.filter((f) => f.tier === "subjournal").length;
-      const co = cell.filter((f) => f.tier === "oa-series").length;
-      cellSub.textContent = `Cell ${cf} · Sub ${cs} · OA ${co}`;
-    }
-    const sciSub = document.getElementById("bento-science-sub");
-    if (sciSub) {
-      const sf = sci.filter((f) => f.tier === "flagship").length;
-      const ss = sci.filter((f) => f.tier === "subjournal").length;
-      const so = sci.filter((f) => f.tier === "oa-series").length;
-      sciSub.textContent = `Science ${sf} · Sub ${ss} · Sci Adv ${so}`;
-    }
 
     if (META.updated_at) {
       els.footerUpdated.textContent = META.updated_at.replace("T", " ").replace("Z", " UTC");
     }
   }
 
-  function syncBentoActive() {
-    els.bentoCards.forEach((card) => {
-      card.classList.toggle("active", card.getAttribute("data-bento-family") === state.family);
+  function syncQuickPillsAndTopics() {
+    els.quickStatPills.forEach((btn) => {
+      const qFam = btn.getAttribute("data-quick-family");
+      const qTier = btn.getAttribute("data-quick-tier");
+      if (qFam) {
+        if (qFam === "all") {
+          btn.classList.toggle("active", state.family === "all" && state.tier === "all");
+        } else {
+          btn.classList.toggle("active", state.family === qFam);
+        }
+      } else if (qTier) {
+        btn.classList.toggle("active", state.tier === qTier);
+      }
+    });
+
+    const curQ = state.q.trim().toLowerCase();
+    els.topicChips.forEach((chip) => {
+      const topic = (chip.getAttribute("data-topic") || "").toLowerCase();
+      chip.classList.toggle("active", Boolean(topic) && curQ === topic);
     });
   }
 
@@ -302,21 +301,6 @@
     });
   }
 
-  function renderFacetList(container, options, currentVal, onSelect) {
-    container.innerHTML = "";
-    options.forEach((opt) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "facet-row-btn" + (String(currentVal) === String(opt.value) ? " active" : "");
-      btn.setAttribute("data-value", opt.value);
-      btn.innerHTML = opt.count != null
-        ? `<span>${opt.label}</span><span class="facet-row-cnt">${opt.count}</span>`
-        : `<span>${opt.label}</span>`;
-      btn.addEventListener("click", () => onSelect(opt.value));
-      container.appendChild(btn);
-    });
-  }
-
   function renderAllFilterChips() {
     const countBy = (key) => {
       const m = {};
@@ -336,18 +320,18 @@
       els.familyChips,
       [
         { value: "all", label: t("all"), count: ALL_FIGURES.length },
-        { value: "nature", label: t("family.nature"), count: famC.nature || 0 },
         { value: "cell", label: t("family.cell"), count: famC.cell || 0 },
+        { value: "nature", label: t("family.nature"), count: famC.nature || 0 },
         { value: "science", label: t("family.science"), count: famC.science || 0 },
       ],
       state.family,
       (v) => { state.family = v; applyFilters(); }
     );
 
-    renderFacetList(
+    renderChipGroup(
       els.tierChips,
       [
-        { value: "all", label: t("all"), count: ALL_FIGURES.length },
+        { value: "all", label: t("all") },
         { value: "flagship", label: t("tier.flagship"), count: tierC.flagship || 0 },
         { value: "subjournal", label: t("tier.subjournal"), count: tierC.subjournal || 0 },
         { value: "oa-series", label: t("tier.oa-series"), count: tierC["oa-series"] || 0 },
@@ -367,9 +351,9 @@
     );
 
     const discs = ["bio-med", "phys-eng", "energy-env", "mat-chem", "ai-comp", "inter-soc"];
-    renderFacetList(
+    renderChipGroup(
       els.disciplineChips,
-      [{ value: "all", label: t("all"), count: ALL_FIGURES.length }].concat(
+      [{ value: "all", label: t("all") }].concat(
         discs.map((d) => ({ value: d, label: t(`disc.${d}`), count: discC[d] || 0 }))
       ),
       state.discipline,
@@ -377,9 +361,9 @@
     );
 
     const pats = ["graphical-abstract", "mechanism", "pipeline", "multipanel", "characterization"];
-    renderFacetList(
+    renderChipGroup(
       els.patternChips,
-      [{ value: "all", label: t("all"), count: ALL_FIGURES.length }].concat(
+      [{ value: "all", label: t("all") }].concat(
         pats.map((p) => ({ value: p, label: t(`pat.${p}`), count: patC[p] || 0 }))
       ),
       state.pattern,
@@ -403,11 +387,6 @@
     }
     if (state.q.trim()) {
       active.push({ label: `"${state.q.trim()}"`, clear: () => { state.q = ""; els.search.value = ""; } });
-    }
-
-    if (els.mobileFilterBadge) {
-      els.mobileFilterBadge.hidden = active.length === 0;
-      els.mobileFilterBadge.textContent = String(active.length);
     }
 
     active.forEach((item) => {
@@ -474,7 +453,7 @@
 
     renderAllFilterChips();
     renderActiveFilterTags();
-    syncBentoActive();
+    syncQuickPillsAndTopics();
     syncQueryParams();
 
     if (window.scrollY > 360) {
@@ -657,7 +636,7 @@
   function setLayoutMode(mode) {
     if (!LAYOUT_MODES.includes(mode)) return;
     state.layout = mode;
-    localStorage.setItem("ncs_layout", state.layout);
+    localStorage.setItem("cns_layout", state.layout);
     applyLayout();
     const prevCount = state.renderedCount || PAGE_SIZE;
     state.renderedCount = 0;
@@ -666,13 +645,6 @@
     while (state.renderedCount < target) {
       renderNextBatch();
     }
-  }
-
-  function openMobileDrawer(open) {
-    if (!els.facetSidebar || !els.drawerBackdrop) return;
-    els.facetSidebar.classList.toggle("open", open);
-    els.drawerBackdrop.hidden = !open;
-    document.body.style.overflow = open ? "hidden" : "";
   }
 
   function openLightbox(idx) {
@@ -789,26 +761,41 @@
   }
 
   // Event wiring
-  els.bentoCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      const fam = card.getAttribute("data-bento-family") || "all";
-      if (fam === "all") {
+  els.quickStatPills.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const qFam = btn.getAttribute("data-quick-family");
+      const qTier = btn.getAttribute("data-quick-tier");
+      if (qFam === "all") {
         state.family = "all";
-      } else {
-        state.family = state.family === fam ? "all" : fam;
+        state.tier = "all";
+      } else if (qFam) {
+        state.family = state.family === qFam ? "all" : qFam;
+      } else if (qTier) {
+        state.tier = state.tier === qTier ? "all" : qTier;
       }
       applyFilters();
     });
   });
 
-  if (els.mobileFilterBtn) {
-    els.mobileFilterBtn.addEventListener("click", () => openMobileDrawer(true));
-  }
-  if (els.drawerClose) {
-    els.drawerClose.addEventListener("click", () => openMobileDrawer(false));
-  }
-  if (els.drawerBackdrop) {
-    els.drawerBackdrop.addEventListener("click", () => openMobileDrawer(false));
+  els.topicChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const topic = chip.getAttribute("data-topic") || "";
+      if (state.q.trim().toLowerCase() === topic.toLowerCase()) {
+        state.q = "";
+      } else {
+        state.q = topic;
+      }
+      els.search.value = state.q;
+      applyFilters();
+    });
+  });
+
+  if (els.toggleFiltersBtn) {
+    els.toggleFiltersBtn.addEventListener("click", () => {
+      state.filtersCollapsed = !state.filtersCollapsed;
+      localStorage.setItem("cns_filters_collapsed", state.filtersCollapsed ? "1" : "0");
+      applyFiltersCollapseState();
+    });
   }
 
   els.search.addEventListener("input", () => {
@@ -841,14 +828,14 @@
 
   els.langToggle.addEventListener("click", () => {
     state.lang = state.lang === "zh" ? "en" : "zh";
-    localStorage.setItem("ncs_lang", state.lang);
+    localStorage.setItem("cns_lang", state.lang);
     applyTranslations();
     buildJournalDropdown();
     applyFilters();
   });
   els.themeToggle.addEventListener("click", () => {
     state.theme = state.theme === "dark" ? "light" : "dark";
-    localStorage.setItem("ncs_theme", state.theme);
+    localStorage.setItem("cns_theme", state.theme);
     applyTheme();
   });
 
@@ -877,7 +864,7 @@
   els.lbCopyCss.addEventListener("click", () => {
     const fig = state.filtered[state.lbIndex];
     if (fig) {
-      const css = fig.palette.map((c, i) => `--nsc-color-${i + 1}: ${c};`).join("\n");
+      const css = fig.palette.map((c, i) => `--cns-color-${i + 1}: ${c};`).join("\n");
       copyText(css, "CSS variables");
     }
   });
@@ -930,9 +917,6 @@
   window.addEventListener(
     "resize",
     () => {
-      if (window.innerWidth > 1024 && els.facetSidebar && els.facetSidebar.classList.contains("open")) {
-        openMobileDrawer(false);
-      }
       if (state.layout === "masonry" && getMasonryColumnCount() !== currentColCount) {
         const prevCount = state.renderedCount || PAGE_SIZE;
         state.renderedCount = 0;
