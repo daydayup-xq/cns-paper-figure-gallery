@@ -4,6 +4,8 @@
 
 <img src="docs/banner.svg" alt="NSC Paper Figure Gallery Banner" width="920">
 
+<p align="center"><img src="assets/logo.png" alt="NSC Paper Figure Gallery Logo" width="96"></p>
+
 # 🎨 NSC Paper Figure Gallery
 ### Figure 1 & Graphical Abstract inspiration from Nature, Science, and Cell journals · All Disciplines · 2024–2026
 
