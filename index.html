@@ -4,89 +4,185 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NSC Paper Figure Gallery · Nature / Science / Cell 论文主图灵感画廊 (2024–2026 OA)</title>
-<meta name="description" content="全学科 Nature、Science、Cell 正刊及子刊最近三年（2024–2026）Open Access 论文主图（Figure 1 / Graphical Abstract）灵感画廊，支持学科方向、期刊矩阵、视觉类型筛选与顶刊配色一键提取。">
+<meta name="description" content="全学科 Nature、Science、Cell 正刊及子刊最近三年（2024–2026）Open Access 论文主图（Figure 1 / Graphical Abstract）灵感画廊，支持左侧多维分面筛选、实测 5 色色卡提取与科研工作台式高效浏览。">
 <meta property="og:title" content="NSC Paper Figure Gallery · 顶刊论文主图灵感画廊">
-<meta property="og:description" content="全学科 Nature / Science / Cell 正刊及子刊 2024–2026 Open Access 论文主图与配色参考画廊。">
+<meta property="og:description" content="全学科 Nature / Science / Cell 正刊及子刊 2024–2026 Open Access 论文主图与实测配色科研工作台。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://daydayup-xq.github.io/ncs-paper-figure-gallery/">
 <link rel="canonical" href="https://daydayup-xq.github.io/ncs-paper-figure-gallery/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f172a'/%3E%3Ccircle cx='34' cy='36' r='13' fill='%23c8102e'/%3E%3Ccircle cx='66' cy='36' r='13' fill='%232563eb'/%3E%3Ccircle cx='50' cy='66' r='13' fill='%23059669'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="assets/style.css?v=20261126">
+<link rel="stylesheet" href="assets/style.css?v=20261126b">
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
-    <div class="hero-top">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-          <span class="dot d-nature" title="Nature"></span>
-          <span class="dot d-science" title="Science"></span>
-          <span class="dot d-cell" title="Cell"></span>
-        </div>
-        <div class="brand-text">
-          <h1>NSC Paper Figure Gallery</h1>
-          <p class="tagline" data-i18n="tagline">全学科 Nature / Science / Cell 正刊与子刊 · 近三年 (2024–2026) Open Access 论文主图灵感画廊</p>
-          <p class="repo-prompt">
-            <span class="oa-badge">100% Open Access · CC BY / PMC OA</span>
-            <span class="sep-dot" aria-hidden="true">｜</span>
-            <a href="https://github.com/daydayup-xq/ncs-paper-figure-gallery" target="_blank" rel="noopener noreferrer" data-i18n="repo.star">觉得有用？欢迎去 GitHub 点个 Star ⭐</a>
-          </p>
-        </div>
+<!-- Sticky Top App Bar -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="dot d-nature" title="Nature"></span>
+        <span class="dot d-science" title="Science"></span>
+        <span class="dot d-cell" title="Cell"></span>
       </div>
-
-      <div class="hero-right">
-        <div class="hero-actions">
-          <button id="palette-studio-btn" class="action-btn accent-btn" type="button" data-i18n="btn.paletteStudio">🎨 顶刊色卡库</button>
-          <button id="support-btn" class="action-btn support-btn" type="button" aria-haspopup="dialog" aria-controls="support-modal" data-i18n="btn.support">♡ 支持作者</button>
-          <button id="theme-toggle" class="action-btn" type="button" title="切换深浅色 / Toggle Theme">🌙</button>
-          <button id="lang-toggle" class="action-btn" type="button" title="Switch language">中 / EN</button>
-          <a class="action-btn github-btn" href="https://github.com/daydayup-xq/ncs-paper-figure-gallery" target="_blank" rel="noopener noreferrer" id="repo-link">
-            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1.01 1.72 2.65 1.22 3.3.93.1-.73.39-1.22.72-1.5-2.5-.29-5.12-1.25-5.12-5.57 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.09 1.15A10.77 10.77 0 0 1 12 6.15c.96 0 1.92.13 2.82.38 2.14-1.45 3.08-1.15 3.08-1.15.62 1.55.23 2.7.12 2.98.72.79 1.15 1.79 1.15 3.02 0 4.33-2.63 5.28-5.14 5.56.4.35.76 1.03.76 2.08v3.11c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z"/></svg>
-            <span>GitHub</span>
-          </a>
+      <div class="brand-text">
+        <div class="brand-title-row">
+          <h1>NSC Paper Figure Gallery</h1>
+          <span class="oa-pill">100% OA · 2024–2026</span>
         </div>
-
-        <div class="hero-stats" id="hero-stats">
-          <span class="stat-pill"><b id="stat-total">0</b>&nbsp;<span data-i18n="stat.total">主图</span></span>
-          <span class="stat-pill nature"><i class="dot-sm"></i><b id="stat-nature">0</b>&nbsp;Nature</span>
-          <span class="stat-pill science"><i class="dot-sm"></i><b id="stat-science">0</b>&nbsp;Science</span>
-          <span class="stat-pill cell"><i class="dot-sm"></i><b id="stat-cell">0</b>&nbsp;Cell</span>
-          <span class="stat-pill flagship">★&nbsp;<b id="stat-flagship">0</b>&nbsp;<span data-i18n="stat.flagship">正刊</span></span>
-        </div>
+        <p class="repo-prompt">
+          <span data-i18n="tagline.short">Nature · Science · Cell 全学科论文主图与实测配色工作台</span>
+          <span class="sep-dot" aria-hidden="true">｜</span>
+          <a href="https://github.com/daydayup-xq/ncs-paper-figure-gallery" target="_blank" rel="noopener noreferrer" data-i18n="repo.star">觉得有用？欢迎去 GitHub 点个 Star ⭐</a>
+        </p>
       </div>
     </div>
 
-    <a class="partner-cta" href="https://xqai.top" target="_blank" rel="noopener noreferrer">
-      <span class="pc-ic" aria-hidden="true">🤝</span>
-      <span class="pc-main">
-        <span class="pc-t">
-          <span data-i18n="partner.badge">赞助伙伴 · Sponsor Partner</span>
-          <strong>XQAI · xqai.top</strong>
-        </span>
-        <span class="pc-s" data-i18n="partner.sub">ChatGPT Plus / Pro 会员 24 小时全自动自助充值（无需账号密码，安全防封）· 科研绘图与论文润色效率拍档</span>
-      </span>
-      <span class="pc-go" data-i18n="partner.cta">访问 xqai.top ↗</span>
-    </a>
+    <div class="topbar-search-group">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M21 21l-4.3-4.3M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
+        <input id="search" type="search" data-i18n-ph="search.ph" placeholder="搜论文标题、期刊、图注、作者或 DOI… (/)" autocomplete="off">
+        <kbd class="kbd-hint" title="Press / to search">/</kbd>
+        <button id="clear-search" class="clear-btn" title="Clear" hidden>×</button>
+      </div>
+      <select id="journal-filter" class="select-ctrl journal-select" aria-label="Journal filter">
+        <option value="all">全部期刊 / All Journals</option>
+      </select>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="palette-studio-btn" class="action-btn accent-btn" type="button" data-i18n="btn.paletteStudio">🎨 顶刊色卡库</button>
+      <button id="support-btn" class="action-btn support-btn" type="button" aria-haspopup="dialog" aria-controls="support-modal" data-i18n="btn.support">♡ 支持作者</button>
+      <button id="theme-toggle" class="action-btn icon-btn" type="button" title="切换深浅色 / Toggle Theme">🌙</button>
+      <button id="lang-toggle" class="action-btn" type="button" title="Switch language">中 / EN</button>
+      <a class="action-btn github-btn" href="https://github.com/daydayup-xq/ncs-paper-figure-gallery" target="_blank" rel="noopener noreferrer" id="repo-link">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1.01 1.72 2.65 1.22 3.3.93.1-.73.39-1.22.72-1.5-2.5-.29-5.12-1.25-5.12-5.57 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.09 1.15A10.77 10.77 0 0 1 12 6.15c.96 0 1.92.13 2.82.38 2.14-1.45 3.08-1.15 3.08-1.15.62 1.55.23 2.7.12 2.98.72.79 1.15 1.79 1.15 3.02 0 4.33-2.63 5.28-5.14 5.56.4.35.76 1.03.76 2.08v3.11c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z"/></svg>
+        <span>GitHub</span>
+      </a>
+    </div>
   </div>
 </header>
 
-<div class="stickbar">
-  <div class="stickbar-inner">
-    <div class="stick-row">
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M21 21l-4.3-4.3M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
-        <input id="search" type="search" data-i18n-ph="search.ph" placeholder="搜论文标题、期刊名、图注关键词、作者或 DOI…" autocomplete="off">
-        <button id="clear-search" class="clear-btn" title="Clear" hidden>×</button>
+<!-- Interactive 4-Card NSC Editorial Bento Strip -->
+<section class="masthead" aria-label="NSC Journal Portfolio Telemetry">
+  <div class="masthead-inner">
+    <div class="bento-strip" id="hero-stats">
+      <button type="button" class="bento-card bento-all active" data-bento-family="all">
+        <div class="bento-top">
+          <span class="bento-eyebrow" data-i18n="bento.allLabel">全部 NSC 馆藏</span>
+          <span class="bento-badge" id="bento-journals-badge"><b id="stat-journals">68</b>&nbsp;<span data-i18n="bento.journals">本期刊</span></span>
+        </div>
+        <div class="bento-num-row">
+          <strong class="bento-num" id="stat-total">0</strong>
+          <span class="bento-unit" data-i18n="stat.total">张主图</span>
+        </div>
+        <div class="bento-sub">
+          <span class="bento-flagship-tag">★ <b id="stat-flagship">0</b>&nbsp;<span data-i18n="bento.flagshipCount">正刊首图</span></span>
+        </div>
+      </button>
+
+      <button type="button" class="bento-card bento-nature" data-bento-family="nature">
+        <div class="bento-top">
+          <span class="bento-eyebrow"><i class="dot-sm"></i>Nature Portfolio</span>
+          <span class="bento-arrow" aria-hidden="true">↗</span>
+        </div>
+        <div class="bento-num-row">
+          <strong class="bento-num" id="stat-nature">0</strong>
+          <span class="bento-unit" data-i18n="stat.total">张主图</span>
+        </div>
+        <div class="bento-sub" id="bento-nature-sub">Nature · 36 Sub-journals · Nat Commun</div>
+      </button>
+
+      <button type="button" class="bento-card bento-cell" data-bento-family="cell">
+        <div class="bento-top">
+          <span class="bento-eyebrow"><i class="dot-sm"></i>Cell Press</span>
+          <span class="bento-arrow" aria-hidden="true">↗</span>
+        </div>
+        <div class="bento-num-row">
+          <strong class="bento-num" id="stat-cell">0</strong>
+          <span class="bento-unit" data-i18n="stat.total">张主图</span>
+        </div>
+        <div class="bento-sub" id="bento-cell-sub">Cell · 21 Sub-journals · iScience</div>
+      </button>
+
+      <button type="button" class="bento-card bento-science" data-bento-family="science">
+        <div class="bento-top">
+          <span class="bento-eyebrow"><i class="dot-sm"></i>Science Family</span>
+          <span class="bento-arrow" aria-hidden="true">↗</span>
+        </div>
+        <div class="bento-num-row">
+          <strong class="bento-num" id="stat-science">0</strong>
+          <span class="bento-unit" data-i18n="stat.total">张主图</span>
+        </div>
+        <div class="bento-sub" id="bento-science-sub">Science · 4 Sub-journals · Sci Adv</div>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile Drawer Backdrop -->
+<div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+
+<!-- 2-Column Editorial Workbench -->
+<div class="workbench">
+  <!-- Left Sticky Facet Sidebar -->
+  <aside id="facet-sidebar" class="facet-sidebar" aria-label="Filters">
+    <div class="sidebar-head">
+      <span class="sidebar-title" data-i18n="sidebar.title">🎛️ 多维筛选工作台</span>
+      <div class="sidebar-head-actions">
+        <button id="reset-top" class="reset-chip" type="button" hidden data-i18n="btn.reset">重置筛选</button>
+        <button id="drawer-close" class="drawer-close" type="button" aria-label="Close filters">×</button>
+      </div>
+    </div>
+
+    <div class="facet-group">
+      <div class="facet-label" data-i18n="fl.year">年份</div>
+      <div class="segmented-year" id="year-chips" role="group" aria-label="year filter"></div>
+    </div>
+
+    <div class="facet-group">
+      <div class="facet-label" data-i18n="fl.tier">期刊级别</div>
+      <div class="facet-list" id="tier-chips" role="group" aria-label="tier filter"></div>
+    </div>
+
+    <div class="facet-group">
+      <div class="facet-label" data-i18n="fl.family">出版体系</div>
+      <div class="chips family-grid" id="family-chips" role="group" aria-label="family filter"></div>
+    </div>
+
+    <div class="facet-group">
+      <div class="facet-label" data-i18n="fl.discipline">学科方向</div>
+      <div class="facet-list" id="discipline-chips" role="group" aria-label="discipline filter"></div>
+    </div>
+
+    <div class="facet-group">
+      <div class="facet-label" data-i18n="fl.pattern">主图类型</div>
+      <div class="facet-list" id="pattern-chips" role="group" aria-label="pattern filter"></div>
+    </div>
+
+    <!-- Sponsor Partner Card in Sidebar -->
+    <a class="partner-cta sidebar-partner" href="https://xqai.top" target="_blank" rel="noopener noreferrer">
+      <div class="pc-head">
+        <span class="pc-badge" data-i18n="partner.badge">🤝 赞助伙伴 · Sponsor</span>
+        <span class="pc-go">xqai.top ↗</span>
+      </div>
+      <strong class="pc-brand">XQAI · AI 会员自助充值中心</strong>
+      <p class="pc-s" data-i18n="partner.sub">ChatGPT Plus / Pro 24h 全自动自助充值（无需账号密码，安全防封）· 科研绘图与论文润色拍档</p>
+    </a>
+  </aside>
+
+  <!-- Right Studio Canvas -->
+  <main class="studio-main">
+    <div class="canvas-toolbar">
+      <div class="toolbar-left">
+        <button id="mobile-filter-btn" class="action-btn mobile-filter-btn" type="button">
+          <span data-i18n="sidebar.mobileBtn">🎛️ 筛选</span>
+          <span id="mobile-filter-badge" class="filter-badge" hidden>0</span>
+        </button>
+        <span id="result-count" class="result-count"></span>
+        <div id="active-filter-tags" class="active-filter-tags"></div>
       </div>
 
-      <span id="result-count" class="result-count"></span>
-
-      <div class="controls-right">
-        <select id="journal-filter" class="select-ctrl" aria-label="Journal filter">
-          <option value="all">全部期刊 / All Journals</option>
-        </select>
-
+      <div class="toolbar-right">
         <div class="sort-wrap">
           <label for="sort" data-i18n="sort.label">排序</label>
           <select id="sort" class="select-ctrl">
@@ -97,48 +193,31 @@
           </select>
         </div>
 
+        <div class="view-switch" id="view-switch" role="group" aria-label="View layout">
+          <button type="button" class="view-tab active" data-layout="masonry" data-i18n="layout.masonry">瀑布流</button>
+          <button type="button" class="view-tab" data-layout="grid" data-i18n="layout.grid">等高</button>
+          <button type="button" class="view-tab" data-layout="compact" data-i18n="layout.compact">紧凑图墙</button>
+        </div>
+
         <button id="density-toggle" class="density-btn" type="button" title="Toggle layout">
           <span id="density-label" data-i18n="layout.masonry">瀑布流</span>
         </button>
-
-        <button id="reset-top" class="reset-chip" type="button" hidden data-i18n="btn.reset">重置筛选</button>
       </div>
     </div>
 
-    <div class="filter-row">
-      <span class="filter-label" data-i18n="fl.family">出版体系</span>
-      <div class="chips" id="family-chips" role="group" aria-label="family filter"></div>
-      <span class="filter-label sep" data-i18n="fl.tier">期刊级别</span>
-      <div class="chips" id="tier-chips" role="group" aria-label="tier filter"></div>
-      <span class="filter-label sep" data-i18n="fl.year">年份</span>
-      <div class="chips" id="year-chips" role="group" aria-label="year filter"></div>
+    <div id="gallery" class="masonry" aria-live="polite"></div>
+    <div id="sentinel" class="sentinel" hidden>
+      <span class="spinner"></span>
+      <span data-i18n="loading">正在加载更多主图…</span>
     </div>
-
-    <div class="filter-row">
-      <span class="filter-label" data-i18n="fl.discipline">学科方向</span>
-      <div class="chips" id="discipline-chips" role="group" aria-label="discipline filter"></div>
+    <div id="end-hint" class="end-hint" hidden></div>
+    <div id="empty" class="empty-state" hidden>
+      <div class="empty-emoji">🔬</div>
+      <p data-i18n="empty.text">当前筛选条件下暂无匹配主图，试试放宽年份或切换学科方向。</p>
+      <button id="reset-all" class="primary-btn" type="button" data-i18n="empty.reset">重置全部筛选</button>
     </div>
-
-    <div class="filter-row">
-      <span class="filter-label" data-i18n="fl.pattern">主图类型</span>
-      <div class="chips" id="pattern-chips" role="group" aria-label="pattern filter"></div>
-    </div>
-  </div>
+  </main>
 </div>
-
-<main class="container">
-  <div id="gallery" class="masonry" aria-live="polite"></div>
-  <div id="sentinel" class="sentinel" hidden>
-    <span class="spinner"></span>
-    <span data-i18n="loading">正在加载更多主图…</span>
-  </div>
-  <div id="end-hint" class="end-hint" hidden></div>
-  <div id="empty" class="empty-state" hidden>
-    <div class="empty-emoji">🔬</div>
-    <p data-i18n="empty.text">当前筛选条件下暂无匹配主图，试试放宽年份或切换学科方向。</p>
-    <button id="reset-all" class="primary-btn" type="button" data-i18n="empty.reset">重置全部筛选</button>
-  </div>
-</main>
 
 <footer class="site-footer">
   <div class="footer-inner">
@@ -274,8 +353,8 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<script src="assets/i18n.js?v=20261126"></script>
-<script src="assets/figures.js?v=20261126"></script>
-<script src="assets/app.js?v=20261126"></script>
+<script src="assets/i18n.js?v=20261126b"></script>
+<script src="assets/figures.js?v=20261126b"></script>
+<script src="assets/app.js?v=20261126b"></script>
 </body>
 </html>

@@ -4,16 +4,18 @@
   const ALL_FIGURES = Array.isArray(window.FIGURES) ? window.FIGURES : [];
   const META = window.GALLERY_META || {};
   const PAGE_SIZE = 40;
+  const LAYOUT_MODES = ["masonry", "grid", "compact"];
 
   let masonryCols = [];
   let masonryHeights = [];
   let currentColCount = 0;
   let scrollCheckScheduled = false;
 
+  const savedLayout = localStorage.getItem("ncs_layout");
   const state = {
     lang: localStorage.getItem("ncs_lang") || "zh",
     theme: localStorage.getItem("ncs_theme") || "light",
-    layout: localStorage.getItem("ncs_layout") || "masonry",
+    layout: LAYOUT_MODES.includes(savedLayout) ? savedLayout : "masonry",
     q: "",
     family: "all",
     tier: "all",
@@ -35,12 +37,20 @@
     search: document.getElementById("search"),
     clearSearch: document.getElementById("clear-search"),
     resultCount: document.getElementById("result-count"),
+    activeFilterTags: document.getElementById("active-filter-tags"),
     sort: document.getElementById("sort"),
     journalFilter: document.getElementById("journal-filter"),
+    viewSwitch: document.getElementById("view-switch"),
     densityToggle: document.getElementById("density-toggle"),
     densityLabel: document.getElementById("density-label"),
     resetTop: document.getElementById("reset-top"),
     resetAll: document.getElementById("reset-all"),
+    bentoCards: document.querySelectorAll(".bento-card"),
+    facetSidebar: document.getElementById("facet-sidebar"),
+    drawerBackdrop: document.getElementById("drawer-backdrop"),
+    drawerClose: document.getElementById("drawer-close"),
+    mobileFilterBtn: document.getElementById("mobile-filter-btn"),
+    mobileFilterBadge: document.getElementById("mobile-filter-badge"),
     familyChips: document.getElementById("family-chips"),
     tierChips: document.getElementById("tier-chips"),
     yearChips: document.getElementById("year-chips"),
@@ -123,15 +133,28 @@
   }
 
   function applyLayout() {
-    els.gallery.className = state.layout === "grid" ? "grid-view" : "masonry";
-    els.densityLabel.textContent = state.layout === "grid" ? t("layout.grid") : t("layout.masonry");
+    if (state.layout === "grid") {
+      els.gallery.className = "grid-view";
+    } else if (state.layout === "compact") {
+      els.gallery.className = "compact-view";
+    } else {
+      els.gallery.className = "masonry";
+    }
+    if (els.densityLabel) {
+      els.densityLabel.textContent = t(`layout.${state.layout}`);
+    }
+    if (els.viewSwitch) {
+      els.viewSwitch.querySelectorAll(".view-tab").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-layout") === state.layout);
+      });
+    }
   }
 
   function getMasonryColumnCount() {
     const w = window.innerWidth;
     if (w <= 580) return 1;
     if (w <= 920) return 2;
-    if (w <= 1320) return 3;
+    if (w <= 1440) return 3;
     return 4;
   }
 
@@ -199,18 +222,52 @@
   }
 
   function updateHeroStats() {
-    const nat = ALL_FIGURES.filter((f) => f.family === "nature").length;
-    const sci = ALL_FIGURES.filter((f) => f.family === "science").length;
-    const cell = ALL_FIGURES.filter((f) => f.family === "cell").length;
+    const nat = ALL_FIGURES.filter((f) => f.family === "nature");
+    const sci = ALL_FIGURES.filter((f) => f.family === "science");
+    const cell = ALL_FIGURES.filter((f) => f.family === "cell");
     const flag = ALL_FIGURES.filter((f) => f.tier === "flagship").length;
-    document.getElementById("stat-total").textContent = ALL_FIGURES.length;
-    document.getElementById("stat-nature").textContent = nat;
-    document.getElementById("stat-science").textContent = sci;
-    document.getElementById("stat-cell").textContent = cell;
-    document.getElementById("stat-flagship").textContent = flag;
+    const journalsCount = new Set(ALL_FIGURES.map((f) => f.journal_slug)).size;
+
+    document.getElementById("stat-total").textContent = ALL_FIGURES.length.toLocaleString();
+    document.getElementById("stat-nature").textContent = nat.length.toLocaleString();
+    document.getElementById("stat-science").textContent = sci.length.toLocaleString();
+    document.getElementById("stat-cell").textContent = cell.length.toLocaleString();
+    document.getElementById("stat-flagship").textContent = flag.toLocaleString();
+
+    const jCountEl = document.getElementById("stat-journals");
+    if (jCountEl) jCountEl.textContent = journalsCount;
+
+    const natSub = document.getElementById("bento-nature-sub");
+    if (natSub) {
+      const nf = nat.filter((f) => f.tier === "flagship").length;
+      const ns = nat.filter((f) => f.tier === "subjournal").length;
+      const no = nat.filter((f) => f.tier === "oa-series").length;
+      natSub.textContent = `Nature ${nf} · Sub ${ns} · Nat Commun ${no}`;
+    }
+    const cellSub = document.getElementById("bento-cell-sub");
+    if (cellSub) {
+      const cf = cell.filter((f) => f.tier === "flagship").length;
+      const cs = cell.filter((f) => f.tier === "subjournal").length;
+      const co = cell.filter((f) => f.tier === "oa-series").length;
+      cellSub.textContent = `Cell ${cf} · Sub ${cs} · OA ${co}`;
+    }
+    const sciSub = document.getElementById("bento-science-sub");
+    if (sciSub) {
+      const sf = sci.filter((f) => f.tier === "flagship").length;
+      const ss = sci.filter((f) => f.tier === "subjournal").length;
+      const so = sci.filter((f) => f.tier === "oa-series").length;
+      sciSub.textContent = `Science ${sf} · Sub ${ss} · Sci Adv ${so}`;
+    }
+
     if (META.updated_at) {
       els.footerUpdated.textContent = META.updated_at.replace("T", " ").replace("Z", " UTC");
     }
+  }
+
+  function syncBentoActive() {
+    els.bentoCards.forEach((card) => {
+      card.classList.toggle("active", card.getAttribute("data-bento-family") === state.family);
+    });
   }
 
   function buildJournalDropdown() {
@@ -245,6 +302,21 @@
     });
   }
 
+  function renderFacetList(container, options, currentVal, onSelect) {
+    container.innerHTML = "";
+    options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "facet-row-btn" + (String(currentVal) === String(opt.value) ? " active" : "");
+      btn.setAttribute("data-value", opt.value);
+      btn.innerHTML = opt.count != null
+        ? `<span>${opt.label}</span><span class="facet-row-cnt">${opt.count}</span>`
+        : `<span>${opt.label}</span>`;
+      btn.addEventListener("click", () => onSelect(opt.value));
+      container.appendChild(btn);
+    });
+  }
+
   function renderAllFilterChips() {
     const countBy = (key) => {
       const m = {};
@@ -265,17 +337,17 @@
       [
         { value: "all", label: t("all"), count: ALL_FIGURES.length },
         { value: "nature", label: t("family.nature"), count: famC.nature || 0 },
-        { value: "science", label: t("family.science"), count: famC.science || 0 },
         { value: "cell", label: t("family.cell"), count: famC.cell || 0 },
+        { value: "science", label: t("family.science"), count: famC.science || 0 },
       ],
       state.family,
       (v) => { state.family = v; applyFilters(); }
     );
 
-    renderChipGroup(
+    renderFacetList(
       els.tierChips,
       [
-        { value: "all", label: t("all") },
+        { value: "all", label: t("all"), count: ALL_FIGURES.length },
         { value: "flagship", label: t("tier.flagship"), count: tierC.flagship || 0 },
         { value: "subjournal", label: t("tier.subjournal"), count: tierC.subjournal || 0 },
         { value: "oa-series", label: t("tier.oa-series"), count: tierC["oa-series"] || 0 },
@@ -294,10 +366,10 @@
       (v) => { state.year = v; applyFilters(); }
     );
 
-    const discs = ["bio-med", "mat-chem", "energy-env", "phys-eng", "ai-comp", "inter-soc"];
-    renderChipGroup(
+    const discs = ["bio-med", "phys-eng", "energy-env", "mat-chem", "ai-comp", "inter-soc"];
+    renderFacetList(
       els.disciplineChips,
-      [{ value: "all", label: t("all") }].concat(
+      [{ value: "all", label: t("all"), count: ALL_FIGURES.length }].concat(
         discs.map((d) => ({ value: d, label: t(`disc.${d}`), count: discC[d] || 0 }))
       ),
       state.discipline,
@@ -305,14 +377,50 @@
     );
 
     const pats = ["graphical-abstract", "mechanism", "pipeline", "multipanel", "characterization"];
-    renderChipGroup(
+    renderFacetList(
       els.patternChips,
-      [{ value: "all", label: t("all") }].concat(
+      [{ value: "all", label: t("all"), count: ALL_FIGURES.length }].concat(
         pats.map((p) => ({ value: p, label: t(`pat.${p}`), count: patC[p] || 0 }))
       ),
       state.pattern,
       (v) => { state.pattern = v; applyFilters(); }
     );
+  }
+
+  function renderActiveFilterTags() {
+    if (!els.activeFilterTags) return;
+    els.activeFilterTags.innerHTML = "";
+    const active = [];
+    if (state.family !== "all") active.push({ label: t(`family.${state.family}`), clear: () => { state.family = "all"; } });
+    if (state.tier !== "all") active.push({ label: t(`tier.${state.tier}`), clear: () => { state.tier = "all"; } });
+    if (state.year !== "all") active.push({ label: state.year, clear: () => { state.year = "all"; } });
+    if (state.discipline !== "all") active.push({ label: t(`disc.${state.discipline}`), clear: () => { state.discipline = "all"; } });
+    if (state.pattern !== "all") active.push({ label: t(`pat.${state.pattern}`), clear: () => { state.pattern = "all"; } });
+    if (state.journal !== "all") {
+      const opt = els.journalFilter.options[els.journalFilter.selectedIndex];
+      const lbl = opt ? opt.textContent.replace(/\s*\(\d+\)$/, "") : state.journal;
+      active.push({ label: lbl, clear: () => { state.journal = "all"; els.journalFilter.value = "all"; } });
+    }
+    if (state.q.trim()) {
+      active.push({ label: `"${state.q.trim()}"`, clear: () => { state.q = ""; els.search.value = ""; } });
+    }
+
+    if (els.mobileFilterBadge) {
+      els.mobileFilterBadge.hidden = active.length === 0;
+      els.mobileFilterBadge.textContent = String(active.length);
+    }
+
+    active.forEach((item) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "active-tag";
+      btn.innerHTML = `<span>${escapeHtml(item.label)}</span><span aria-hidden="true">×</span>`;
+      btn.addEventListener("click", () => {
+        item.clear();
+        applyFilters();
+      });
+      els.activeFilterTags.appendChild(btn);
+    });
   }
 
   function applyFilters() {
@@ -361,10 +469,12 @@
     els.resetTop.hidden = !hasActive;
     els.clearSearch.hidden = !state.q;
     els.resultCount.textContent = t("showing")
-      .replace("{n}", list.length)
-      .replace("{total}", ALL_FIGURES.length);
+      .replace("{n}", list.length.toLocaleString())
+      .replace("{total}", ALL_FIGURES.length.toLocaleString());
 
     renderAllFilterChips();
+    renderActiveFilterTags();
+    syncBentoActive();
     syncQueryParams();
 
     if (window.scrollY > 360) {
@@ -383,41 +493,53 @@
 
     const w = fig.w > 0 ? fig.w : 1200;
     const h = fig.h > 0 ? fig.h : 800;
-    const famClass = `pill-${fig.family}`;
-    const flagshipBadge =
+    const flagshipPill =
       fig.tier === "flagship"
-        ? `<span class="pill-badge pill-flagship">★ Flagship</span>`
+        ? `<span class="tier-star-pill" title="Flagship">★ Flagship</span>`
         : "";
+
+    const firstAuthor = (fig.authors && fig.authors[0]) ? fig.authors[0] : "";
+    const bylineParts = [];
+    if (firstAuthor) bylineParts.push(fig.authors.length > 1 ? `${firstAuthor} et al.` : firstAuthor);
+    if (fig.doi) bylineParts.push(fig.doi);
+    const byline = bylineParts.join(" · ");
+
+    const dimsText = `${w}×${h}` + (fig.citations > 0 ? ` · Cited ${fig.citations}` : "");
 
     const swatchesHtml = (fig.palette || [])
       .map(
         (hex) =>
-          `<button class="swatch-dot" type="button" style="background:${hex}" title="${hex}" data-hex="${hex}" aria-label="Copy ${hex}"></button>`
+          `<button class="swatch-segment" type="button" style="background:${hex}" title="${hex}" data-hex="${hex}" aria-label="Copy ${hex}"></button>`
       )
       .join("");
 
     card.innerHTML = `
+      <div class="card-header-bar">
+        <span class="card-journal-pill" title="${escapeHtml(fig.journal)}">
+          <span class="journal-bar bar-${fig.family}"></span>
+          <span class="card-journal-name">${escapeHtml(fig.journal_short || fig.journal)}</span>
+          <span class="card-year">${fig.year}</span>
+        </span>
+        <span class="card-header-right">
+          ${flagshipPill}
+          <span class="fig-lbl-pill">${escapeHtml(fig.figure_label || "Fig. 1")}</span>
+        </span>
+      </div>
       <div class="fig-thumb-wrap" data-idx="${idx}">
         <img src="${fig.image}" alt="${escapeHtml(fig.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" width="${w}" height="${h}" style="aspect-ratio: ${w} / ${h};">
-        <div class="fig-top-badges">
-          <span class="pill-badge ${famClass}">${escapeHtml(fig.journal_short || fig.journal)} · ${fig.year}</span>
-          ${flagshipBadge}
-        </div>
+        <span class="thumb-dims-pill">${escapeHtml(dimsText)}</span>
       </div>
       <div class="fig-body">
-        <div class="fig-meta-line">
-          <span class="fig-journal" title="${escapeHtml(fig.journal)}">${escapeHtml(fig.journal)}</span>
-          <span>${escapeHtml(fig.figure_label)}</span>
-        </div>
         <h3 class="fig-title" data-idx="${idx}" title="${escapeHtml(fig.title)}">${escapeHtml(fig.title)}</h3>
+        ${byline ? `<div class="fig-byline" title="${escapeHtml(byline)}">${escapeHtml(byline)}</div>` : ""}
         <div class="fig-tags">
-          <span class="mini-tag">${t("disc." + fig.discipline)}</span>
-          <span class="mini-tag">${t("pat." + fig.pattern)}</span>
+          <button type="button" class="mini-tag" data-filter-disc="${fig.discipline}">${t("disc." + fig.discipline)}</button>
+          <button type="button" class="mini-tag" data-filter-pat="${fig.pattern}">${t("pat." + fig.pattern)}</button>
         </div>
       </div>
       <div class="card-palette">
-        <span class="palette-label">PALETTE</span>
-        ${swatchesHtml}
+        <div class="swatch-bar">${swatchesHtml}</div>
+        <button class="card-py-btn" type="button" title="Copy Python palette">Py</button>
       </div>
     `;
 
@@ -425,7 +547,6 @@
     imgEl.addEventListener("error", () => {
       if (imgEl.dataset.fallbackDone) return;
       imgEl.dataset.fallbackDone = "1";
-      const wrap = card.querySelector(".fig-thumb-wrap");
       const fb = document.createElement("div");
       fb.className = "fig-img-fallback";
       fb.textContent = `${fig.journal} · ${fig.figure_label || "Figure 1"}`;
@@ -434,13 +555,39 @@
 
     card.querySelector(".fig-thumb-wrap").addEventListener("click", () => openLightbox(idx));
     card.querySelector(".fig-title").addEventListener("click", () => openLightbox(idx));
-    card.querySelectorAll(".swatch-dot").forEach((btn) => {
+
+    const discBtn = card.querySelector("[data-filter-disc]");
+    if (discBtn) {
+      discBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        state.discipline = fig.discipline;
+        applyFilters();
+      });
+    }
+    const patBtn = card.querySelector("[data-filter-pat]");
+    if (patBtn) {
+      patBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        state.pattern = fig.pattern;
+        applyFilters();
+      });
+    }
+
+    card.querySelectorAll(".swatch-segment").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         const hex = btn.getAttribute("data-hex");
         copyText(hex, hex);
       });
     });
+
+    const pyBtn = card.querySelector(".card-py-btn");
+    if (pyBtn) {
+      pyBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        copyText(`palette = ${JSON.stringify(fig.palette)}`, "Python palette");
+      });
+    }
 
     return card;
   }
@@ -467,7 +614,7 @@
       els.sentinel.hidden = true;
       if (state.filtered.length > 0) {
         els.endHint.hidden = false;
-        els.endHint.textContent = t("endHint").replace("{n}", state.filtered.length);
+        els.endHint.textContent = t("endHint").replace("{n}", state.filtered.length.toLocaleString());
       }
       return;
     }
@@ -484,7 +631,7 @@
         }
         frags[minCol].appendChild(createCard(fig, i));
         const ratio = fig.w > 0 && fig.h > 0 ? Math.min(fig.h / fig.w, 1.5) : 0.7;
-        masonryHeights[minCol] += ratio + 0.48;
+        masonryHeights[minCol] += ratio + 0.52;
       }
       frags.forEach((f, c) => masonryCols[c].appendChild(f));
     } else {
@@ -501,10 +648,31 @@
     els.sentinel.hidden = !more;
     if (!more && state.filtered.length > 0) {
       els.endHint.hidden = false;
-      els.endHint.textContent = t("endHint").replace("{n}", state.filtered.length);
+      els.endHint.textContent = t("endHint").replace("{n}", state.filtered.length.toLocaleString());
     } else if (more) {
       scheduleScrollCheck();
     }
+  }
+
+  function setLayoutMode(mode) {
+    if (!LAYOUT_MODES.includes(mode)) return;
+    state.layout = mode;
+    localStorage.setItem("ncs_layout", state.layout);
+    applyLayout();
+    const prevCount = state.renderedCount || PAGE_SIZE;
+    state.renderedCount = 0;
+    resetGalleryContainer();
+    const target = Math.min(prevCount, state.filtered.length);
+    while (state.renderedCount < target) {
+      renderNextBatch();
+    }
+  }
+
+  function openMobileDrawer(open) {
+    if (!els.facetSidebar || !els.drawerBackdrop) return;
+    els.facetSidebar.classList.toggle("open", open);
+    els.drawerBackdrop.hidden = !open;
+    document.body.style.overflow = open ? "hidden" : "";
   }
 
   function openLightbox(idx) {
@@ -621,6 +789,28 @@
   }
 
   // Event wiring
+  els.bentoCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const fam = card.getAttribute("data-bento-family") || "all";
+      if (fam === "all") {
+        state.family = "all";
+      } else {
+        state.family = state.family === fam ? "all" : fam;
+      }
+      applyFilters();
+    });
+  });
+
+  if (els.mobileFilterBtn) {
+    els.mobileFilterBtn.addEventListener("click", () => openMobileDrawer(true));
+  }
+  if (els.drawerClose) {
+    els.drawerClose.addEventListener("click", () => openMobileDrawer(false));
+  }
+  if (els.drawerBackdrop) {
+    els.drawerBackdrop.addEventListener("click", () => openMobileDrawer(false));
+  }
+
   els.search.addEventListener("input", () => {
     state.q = els.search.value;
     applyFilters();
@@ -638,18 +828,17 @@
     state.journal = els.journalFilter.value;
     applyFilters();
   });
+
+  if (els.viewSwitch) {
+    els.viewSwitch.querySelectorAll(".view-tab").forEach((btn) => {
+      btn.addEventListener("click", () => setLayoutMode(btn.getAttribute("data-layout")));
+    });
+  }
   els.densityToggle.addEventListener("click", () => {
-    state.layout = state.layout === "masonry" ? "grid" : "masonry";
-    localStorage.setItem("ncs_layout", state.layout);
-    applyLayout();
-    const prevCount = state.renderedCount || PAGE_SIZE;
-    state.renderedCount = 0;
-    resetGalleryContainer();
-    const target = Math.min(prevCount, state.filtered.length);
-    while (state.renderedCount < target) {
-      renderNextBatch();
-    }
+    const idx = LAYOUT_MODES.indexOf(state.layout);
+    setLayoutMode(LAYOUT_MODES[(idx + 1) % LAYOUT_MODES.length]);
   });
+
   els.langToggle.addEventListener("click", () => {
     state.lang = state.lang === "zh" ? "en" : "zh";
     localStorage.setItem("ncs_lang", state.lang);
@@ -688,7 +877,7 @@
   els.lbCopyCss.addEventListener("click", () => {
     const fig = state.filtered[state.lbIndex];
     if (fig) {
-      const css = fig.palette.map((c, i) => `--ncs-color-${i + 1}: ${c};`).join("\n");
+      const css = fig.palette.map((c, i) => `--nsc-color-${i + 1}: ${c};`).join("\n");
       copyText(css, "CSS variables");
     }
   });
@@ -719,6 +908,13 @@
       els.pm.hidden = true;
     } else if (els.sm && !els.sm.hidden && e.key === "Escape") {
       els.sm.hidden = true;
+    } else if (
+      e.key === "/" &&
+      document.activeElement !== els.search &&
+      !["INPUT", "TEXTAREA", "SELECT"].includes((document.activeElement && document.activeElement.tagName) || "")
+    ) {
+      e.preventDefault();
+      els.search.focus();
     }
   });
 
@@ -734,6 +930,9 @@
   window.addEventListener(
     "resize",
     () => {
+      if (window.innerWidth > 1024 && els.facetSidebar && els.facetSidebar.classList.contains("open")) {
+        openMobileDrawer(false);
+      }
       if (state.layout === "masonry" && getMasonryColumnCount() !== currentColCount) {
         const prevCount = state.renderedCount || PAGE_SIZE;
         state.renderedCount = 0;
