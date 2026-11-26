@@ -878,45 +878,107 @@ def resolve_pmc_s3_figure(
         return None
 
 
-def prefetch_cell_piis(dois: list[str], workers: int = 8) -> dict[str, str]:
-    """Batch-fetch Elsevier PIIs via Crossref polite pool (40 DOIs per call)."""
+def clean_pii(raw: str) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9]", "", raw or "")
+    if cleaned.startswith("S") and len(cleaned) >= 16:
+        return cleaned
+    return ""
+
+
+def prefetch_cell_piis(
+    cell_items: list[tuple[str, str]],
+    crossref_workers: int = 2,
+) -> dict[str, str]:
+    """Batch-fetch Elsevier PIIs via NCBI esummary.fcgi (PMID -> PII) with Crossref fallback."""
     pii_cache: dict[str, str] = {}
-    unique = sorted({d.strip().lower() for d in dois if d})
-    if not unique:
+    if not cell_items:
         return pii_cache
 
-    chunks = [unique[i : i + 40] for i in range(0, len(unique), 40)]
+    # 1) Primary fast path: NCBI E-Utilities esummary.fcgi batch POST (150 PMIDs/request)
+    pmid_to_dois: dict[str, list[str]] = {}
+    for doi, pmid in cell_items:
+        d_norm = (doi or "").strip().lower()
+        p_norm = (pmid or "").strip()
+        if d_norm and p_norm.isdigit():
+            pmid_to_dois.setdefault(p_norm, []).append(d_norm)
 
-    def fetch_chunk(chunk: list[str]) -> list[tuple[str, str]]:
+    pmids = sorted(pmid_to_dois.keys())
+    if pmids:
         sess = make_session()
-        out: list[tuple[str, str]] = []
-        try:
-            r = sess.get(
-                "https://api.crossref.org/works",
-                params={
-                    "filter": ",".join(f"doi:{d}" for d in chunk),
-                    "rows": len(chunk),
-                    "select": "DOI,alternative-id",
-                },
-                timeout=14,
-            )
-            if r.status_code == 200:
-                for item in r.json().get("message", {}).get("items", []):
-                    d = (item.get("DOI") or "").strip().lower()
-                    alts = item.get("alternative-id") or []
-                    for alt in alts:
-                        clean_alt = re.sub(r"[^A-Za-z0-9]", "", alt)
-                        if clean_alt.startswith("S") and len(clean_alt) >= 16:
-                            out.append((d, clean_alt))
-                            break
-        except Exception:
-            pass
-        return out
+        for i in range(0, len(pmids), 150):
+            chunk = pmids[i : i + 150]
+            try:
+                r = sess.post(
+                    "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi",
+                    data={"db": "pubmed", "id": ",".join(chunk), "retmode": "json"},
+                    timeout=15,
+                )
+                if r.status_code == 429:
+                    time.sleep(1.5)
+                    r = sess.post(
+                        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi",
+                        data={"db": "pubmed", "id": ",".join(chunk), "retmode": "json"},
+                        timeout=15,
+                    )
+                if r.status_code == 200:
+                    result = r.json().get("result", {})
+                    for pmid in chunk:
+                        entry = result.get(pmid)
+                        if not isinstance(entry, dict):
+                            continue
+                        for aid in entry.get("articleids") or []:
+                            if aid.get("idtype") == "pii":
+                                pii = clean_pii(aid.get("value", ""))
+                                if pii:
+                                    for d_norm in pmid_to_dois.get(pmid, []):
+                                        pii_cache[d_norm] = pii
+                                    break
+            except Exception:
+                pass
+            if i + 150 < len(pmids):
+                time.sleep(0.35)
 
-    with ThreadPoolExecutor(max_workers=workers) as pool:
-        for pairs in pool.map(fetch_chunk, chunks):
-            for d, pii in pairs:
-                pii_cache[d] = pii
+    # 2) Secondary fallback: Crossref batch filter (25 DOIs/chunk, low concurrency)
+    missing_dois = sorted(
+        {
+            (doi or "").strip().lower()
+            for doi, _ in cell_items
+            if doi and (doi or "").strip().lower() not in pii_cache
+        }
+    )
+    if missing_dois:
+        chunks = [missing_dois[i : i + 25] for i in range(0, len(missing_dois), 25)]
+
+        def fetch_chunk(chunk: list[str]) -> list[tuple[str, str]]:
+            sess = make_session()
+            out: list[tuple[str, str]] = []
+            try:
+                r = sess.get(
+                    "https://api.crossref.org/works",
+                    params={
+                        "filter": ",".join(f"doi:{d}" for d in chunk),
+                        "rows": len(chunk),
+                        "select": "DOI,alternative-id",
+                    },
+                    timeout=14,
+                )
+                if r.status_code == 200:
+                    for item in r.json().get("message", {}).get("items", []):
+                        d = (item.get("DOI") or "").strip().lower()
+                        for alt in item.get("alternative-id") or []:
+                            pii = clean_pii(alt)
+                            if pii:
+                                out.append((d, pii))
+                                break
+            except Exception:
+                pass
+            return out
+
+        with ThreadPoolExecutor(max_workers=crossref_workers) as pool:
+            for pairs in pool.map(fetch_chunk, chunks):
+                for d, pii in pairs:
+                    pii_cache[d] = pii
+
     return pii_cache
 
 
@@ -1226,9 +1288,43 @@ def build_gallery_meta(journals_cfg: dict[str, Any], figures: list[dict[str, Any
     }
 
 
+def interleave_tier_candidates(
+    items: list[tuple[dict[str, Any], dict[str, Any], int]],
+) -> list[tuple[dict[str, Any], dict[str, Any], int]]:
+    """Order within a (family, tier) bucket by round-robin across journals, newest & most cited first."""
+    by_journal: dict[str, list[tuple[dict[str, Any], dict[str, Any], int]]] = {}
+    for c in items:
+        by_journal.setdefault(c[0]["slug"], []).append(c)
+    for slug in by_journal:
+        by_journal[slug].sort(key=lambda c: (-int(c[2]), -int(c[1].get("cited_by_count") or 0)))
+
+    slugs = sorted(by_journal.keys(), key=lambda s: len(by_journal[s]), reverse=True)
+    ordered: list[tuple[dict[str, Any], dict[str, Any], int]] = []
+    idx = 0
+    while True:
+        added = False
+        for s in slugs:
+            lst = by_journal[s]
+            if idx < len(lst):
+                ordered.append(lst[idx])
+                added = True
+        if not added:
+            break
+        idx += 1
+    return ordered
+
+
 def write_outputs(journals_cfg: dict[str, Any], figures: list[dict[str, Any]]) -> None:
     tier_rank = {"flagship": 0, "subjournal": 1, "oa-series": 2}
-    figures.sort(key=lambda f: (tier_rank.get(f["tier"], 9), -f["year"], -f["citations"], f["journal"]))
+    figures.sort(
+        key=lambda f: (
+            tier_rank.get(f["tier"], 9),
+            -int(f["year"]),
+            f.get("family", ""),
+            f.get("journal_slug", ""),
+            f.get("id", ""),
+        )
+    )
 
     meta = build_gallery_meta(journals_cfg, figures)
     FIGURES_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -1290,7 +1386,10 @@ def main() -> int:
         if j["tier"] == "flagship":
             gkey = (j["tier"], j["family"], j["slug"])
         elif j["tier"] == "subjournal":
-            gkey = (j["tier"], j["family"], j["default_discipline"])
+            if j["family"] == "science":
+                gkey = (j["tier"], j["family"], j["slug"])
+            else:
+                gkey = (j["tier"], j["family"], j["default_discipline"])
         else:
             gkey = (j["tier"], j["family"], j["slug"] if j["family"] != "cell" else "cell-oa")
         grouped.setdefault(gkey, []).append(j)
@@ -1300,17 +1399,17 @@ def main() -> int:
 
     batches: list[tuple[list[dict[str, Any]], int, str, bool]] = []
     for (tier, fam, slug_or_disc), jlist in ordered_groups:
-        # Chunk ISSNs to <= 16 per query
-        for i in range(0, len(jlist), 8):
-            chunk = jlist[i : i + 8]
+        chunk_step = 4 if fam == "cell" else 8
+        for i in range(0, len(jlist), chunk_step):
+            chunk = jlist[i : i + chunk_step]
             if tier == "flagship":
-                default_q = 400 if fam == "nature" else (300 if fam == "cell" else 200)
+                default_q = 400 if fam == "nature" else (350 if fam == "cell" else 300)
                 quota = args.flagship_per_year or default_q
             elif tier == "subjournal":
-                default_q = 150 if fam == "science" else 200
+                default_q = 240 if fam == "cell" else 200
                 quota = args.subjournal_per_year or default_q
             else:
-                default_q = 200 if fam == "science" else 150
+                default_q = 260 if fam == "science" else (140 if fam == "cell" else 150)
                 quota = args.oa_series_per_year or default_q
 
             oa_filter = "open_access.oa_status:gold|hybrid|diamond" if fam == "nature" else "open_access.is_oa:true"
@@ -1343,63 +1442,88 @@ def main() -> int:
                 seen_dois.add(doi)
                 candidates.append((matched_j, w, yr))
 
-    # Order candidates strictly: Flagship -> Major Sub-journals -> Minor OA Sub-journals
-    candidates.sort(
-        key=lambda c: (
-            tier_order.get(c[0]["tier"], 9),
-            -int(c[2]),
-            -int(c[1].get("cited_by_count") or 0),
-        )
-    )
-    print(f"Discovered {len(candidates)} new candidate OA works (Flagships first).", flush=True)
+    # Order candidates strictly Flagship -> Major Sub-journals -> Minor OA within each family,
+    # round-robin interleaved across journals inside each tier
+    by_family: dict[str, list[tuple[dict[str, Any], dict[str, Any], int]]] = {}
+    for c in candidates:
+        fam = c[0]["family"]
+        by_family.setdefault(fam, []).append(c)
 
-    # Pre-fetch Crossref PIIs in batches of 40 for Cell Press DOIs
-    cell_dois = [
-        (w.get("doi") or "").replace("https://doi.org/", "").strip()
-        for j, w, _yr in candidates
+    ordered_by_family: dict[str, list[tuple[dict[str, Any], dict[str, Any], int]]] = {}
+    for fam, fam_cands in by_family.items():
+        fam_ordered: list[tuple[dict[str, Any], dict[str, Any], int]] = []
+        for tier_name in ("flagship", "subjournal", "oa-series"):
+            tier_cands = [c for c in fam_cands if c[0]["tier"] == tier_name]
+            if tier_cands:
+                fam_ordered.extend(interleave_tier_candidates(tier_cands))
+        ordered_by_family[fam] = fam_ordered
+
+    ordered_candidates = [c for fam in ordered_by_family for c in ordered_by_family[fam]]
+    print(f"Discovered {len(ordered_candidates)} new candidate OA works (Flagships first).", flush=True)
+
+    # Pre-fetch Elsevier PIIs via NCBI esummary.fcgi (PMID -> PII) with Crossref fallback
+    cell_items: list[tuple[str, str]] = [
+        (
+            (w.get("doi") or "").replace("https://doi.org/", "").strip(),
+            ((w.get("ids") or {}).get("pmid") or "").rstrip("/").split("/")[-1],
+        )
+        for j, w, _yr in ordered_candidates
         if j["family"] == "cell"
     ]
     pii_cache: dict[str, str] = {}
-    if cell_dois:
+    if cell_items:
         t_pii = time.time()
-        pii_cache = prefetch_cell_piis(cell_dois, workers=8)
-        print(f"Pre-fetched {len(pii_cache)}/{len(cell_dois)} Cell Press PIIs in {time.time() - t_pii:.1f}s.", flush=True)
+        pii_cache = prefetch_cell_piis(cell_items, crossref_workers=2)
+        print(f"Pre-fetched {len(pii_cache)}/{len(cell_items)} Cell Press PIIs in {time.time() - t_pii:.1f}s.", flush=True)
 
     t0 = time.time()
     resolved_items: list[tuple[dict[str, Any], bytes]] = []
-    needed = max(0, args.target_total - len(existing_by_doi)) if args.target_total > 0 else len(candidates)
+    needed = max(0, args.target_total - len(existing_by_doi)) if args.target_total > 0 else len(ordered_candidates)
 
+    # Resolve each requested family cleanly (preserving Flagship > Major Sub-journal > Minor OA within each family)
+    active_fams = [f for f in args.families if ordered_by_family.get(f)]
+    fam_count = max(1, len(active_fams))
     chunk_size = 240
     checked_total = 0
-    for start in range(0, len(candidates), chunk_size):
-        if len(resolved_items) >= needed:
+
+    for fam_idx, fam in enumerate(active_fams):
+        remaining_needed = max(0, needed - len(resolved_items))
+        if remaining_needed == 0:
             break
-        batch = candidates[start : start + chunk_size]
-        with ThreadPoolExecutor(max_workers=args.workers) as pool:
-            futs = [
-                pool.submit(resolve_candidate, cand, start + i, pii_cache, fast_captions)
-                for i, cand in enumerate(batch)
-            ]
-            for fut in as_completed(futs):
-                checked_total += 1
-                try:
-                    res = fut.result()
-                    if res is not None:
-                        resolved_items.append(res)
-                except Exception:
-                    pass
-        print(
-            f"  Progress: {checked_total}/{len(candidates)} checked, {len(resolved_items)} new resolved "
-            f"(total ~{len(existing_by_doi) + len(resolved_items)}) [{time.time() - t0:.1f}s]",
-            flush=True,
-        )
-        # Periodic checkpoint every 400 newly resolved figures
-        if len(resolved_items) >= 400 and (start + chunk_size) < len(candidates) and (len(resolved_items) % 400 < chunk_size):
-            ckpt_figs = hydrate_dimensions_and_palettes(resolved_items)
-            merged_map = dict(existing_by_doi)
-            for f in ckpt_figs:
-                merged_map[f["doi"].strip().lower()] = f
-            write_outputs(journals_cfg, list(merged_map.values()))
+        remaining_fams = fam_count - fam_idx
+        fam_quota = remaining_needed // remaining_fams if remaining_fams > 1 else remaining_needed
+        fam_target_resolved = len(resolved_items) + fam_quota
+        fam_cands = ordered_by_family[fam]
+        print(f"Resolving family '{fam}' ({len(fam_cands)} candidates, quota {fam_quota})...", flush=True)
+
+        for start in range(0, len(fam_cands), chunk_size):
+            if len(resolved_items) >= fam_target_resolved:
+                break
+            batch = fam_cands[start : start + chunk_size]
+            with ThreadPoolExecutor(max_workers=args.workers) as pool:
+                futs = [
+                    pool.submit(resolve_candidate, cand, start + i, pii_cache, fast_captions)
+                    for i, cand in enumerate(batch)
+                ]
+                for fut in as_completed(futs):
+                    checked_total += 1
+                    try:
+                        res = fut.result()
+                        if res is not None:
+                            resolved_items.append(res)
+                    except Exception:
+                        pass
+            print(
+                f"  [{fam}] Progress: {checked_total}/{len(ordered_candidates)} checked, {len(resolved_items)} new resolved "
+                f"(total ~{len(existing_by_doi) + len(resolved_items)}) [{time.time() - t0:.1f}s]",
+                flush=True,
+            )
+            if len(resolved_items) >= 400 and (len(resolved_items) % 400 < chunk_size):
+                ckpt_figs = hydrate_dimensions_and_palettes(resolved_items)
+                merged_map = dict(existing_by_doi)
+                for f in ckpt_figs:
+                    merged_map[f["doi"].strip().lower()] = f
+                write_outputs(journals_cfg, list(merged_map.values()))
 
     print(f"Resolved {len(resolved_items)} new valid main figures in {time.time() - t0:.1f}s. Finalizing palettes...", flush=True)
     new_figures = hydrate_dimensions_and_palettes(resolved_items)
