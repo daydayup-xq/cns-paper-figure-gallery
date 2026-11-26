@@ -43,6 +43,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { margin: 0; padding: 0; }
 body {
   font-family: var(--font-sans);
@@ -331,12 +332,20 @@ a { color: inherit; text-decoration: none; }
   padding: 20px 24px 48px;
 }
 .masonry {
-  column-count: 4;
-  column-gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
 }
-@media (max-width: 1320px) { .masonry { column-count: 3; } }
-@media (max-width: 920px) { .masonry { column-count: 2; } }
-@media (max-width: 580px) { .masonry { column-count: 1; } }
+.masonry-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+@media (max-width: 1320px) { .masonry { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 920px) { .masonry { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 580px) { .masonry { grid-template-columns: 1fr; } }
 
 .grid-view {
   display: grid;
@@ -345,8 +354,6 @@ a { color: inherit; text-decoration: none; }
 }
 
 .fig-card {
-  break-inside: avoid;
-  margin-bottom: 18px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -356,7 +363,6 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
 }
-.grid-view .fig-card { margin-bottom: 0; }
 .fig-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
@@ -365,10 +371,11 @@ a { color: inherit; text-decoration: none; }
 
 .fig-thumb-wrap {
   position: relative;
-  background: #ffffff;
+  background: var(--surface-2);
   border-bottom: 1px solid var(--border);
   cursor: zoom-in;
   overflow: hidden;
+  min-height: 120px;
 }
 .fig-thumb-wrap img {
   display: block;
@@ -377,6 +384,17 @@ a { color: inherit; text-decoration: none; }
   object-fit: contain;
   max-height: 440px;
   background: #ffffff;
+}
+.fig-img-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  padding: 20px;
+  text-align: center;
+  color: var(--soft);
+  font-size: 0.8rem;
+  background: var(--surface-2);
 }
 .grid-view .fig-thumb-wrap img {
   height: 230px;
@@ -492,6 +510,7 @@ a { color: inherit; text-decoration: none; }
   padding: 26px;
   color: var(--soft);
   font-size: 0.9rem;
+  cursor: pointer;
 }
 .spinner {
   width: 18px;

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import re
@@ -99,8 +100,9 @@ def main() -> int:
             errors.append(f"{fid}: invalid discipline {fig.get('discipline')}")
         if fig.get("pattern") not in valid_patterns:
             errors.append(f"{fid}: invalid pattern {fig.get('pattern')}")
-        if fig.get("year") not in (2024, 2025, 2026):
-            errors.append(f"{fid}: year out of 2024-2026 range: {fig.get('year')}")
+        cur_yr = datetime.now(timezone.utc).year
+        if not isinstance(fig.get("year"), int) or not (2024 <= fig["year"] <= cur_yr):
+            errors.append(f"{fid}: year out of 2024-{cur_yr} range: {fig.get('year')}")
         if not str(fig.get("image", "")).startswith("https://"):
             errors.append(f"{fid}: invalid image URL {fig.get('image')}")
         if not isinstance(fig.get("w"), int) or fig["w"] <= 0 or not isinstance(fig.get("h"), int) or fig["h"] <= 0:

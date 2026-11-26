@@ -1245,8 +1245,9 @@ def write_outputs(journals_cfg: dict[str, Any], figures: list[dict[str, Any]]) -
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Crawl Open Access NCS 2024-2026 main figures")
-    parser.add_argument("--years", nargs="+", type=int, default=[2026, 2025, 2024])
+    cur_yr = datetime.now(timezone.utc).year
+    parser = argparse.ArgumentParser(description="Crawl Open Access NCS recent-3-year main figures")
+    parser.add_argument("--years", nargs="+", type=int, default=[cur_yr, cur_yr - 1, cur_yr - 2])
     parser.add_argument("--families", nargs="+", default=["nature", "science", "cell"])
     parser.add_argument("--merge", action="store_true", help="Merge newly crawled figures with existing data/figures.json")
     parser.add_argument("--target-total", type=int, default=3100, help="Target total figures when stopping early (0 = unlimited)")

@@ -47,4 +47,4 @@ python -X utf8 scripts/validate_gallery.py
 - 在线访问：`https://daydayup-xq.github.io/ncs-paper-figure-gallery/`
 - 内置工作流：
   - `.github/workflows/deploy-pages.yml`：每次推送到 `main` 分支自动发布静态站点。
-  - `.github/workflows/update-figures.yml`：每周自动（或手动触发）增量抓取最新 OA 主图并提交更新。
+  - `.github/workflows/update-figures.yml`：每月 1 日 03:00 UTC（北京时间 11:00，`0 3 1 * *`）自动抓取最新近三年 OA 主图、提交仓库并自动重新部署 GitHub Pages（也支持在 GitHub Actions 页面手动触发）。

@@ -3,7 +3,12 @@
 
   const ALL_FIGURES = Array.isArray(window.FIGURES) ? window.FIGURES : [];
   const META = window.GALLERY_META || {};
-  const PAGE_SIZE = 32;
+  const PAGE_SIZE = 40;
+
+  let masonryCols = [];
+  let masonryHeights = [];
+  let currentColCount = 0;
+  let scrollCheckScheduled = false;
 
   const state = {
     lang: localStorage.getItem("ncs_lang") || "zh",
@@ -118,6 +123,32 @@
     els.densityLabel.textContent = state.layout === "grid" ? t("layout.grid") : t("layout.masonry");
   }
 
+  function getMasonryColumnCount() {
+    const w = window.innerWidth;
+    if (w <= 580) return 1;
+    if (w <= 920) return 2;
+    if (w <= 1320) return 3;
+    return 4;
+  }
+
+  function resetGalleryContainer() {
+    els.gallery.innerHTML = "";
+    masonryCols = [];
+    masonryHeights = [];
+    if (state.layout === "masonry") {
+      currentColCount = getMasonryColumnCount();
+      for (let i = 0; i < currentColCount; i++) {
+        const col = document.createElement("div");
+        col.className = "masonry-col";
+        els.gallery.appendChild(col);
+        masonryCols.push(col);
+        masonryHeights.push(0);
+      }
+    } else {
+      currentColCount = 0;
+    }
+  }
+
   function applyTranslations() {
     document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
     document.querySelectorAll("[data-i18n]").forEach((el) => {
@@ -157,7 +188,7 @@
     if (state.pattern !== "all") p.set("pattern", state.pattern);
     if (state.journal !== "all") p.set("journal", state.journal);
     if (state.q.trim()) p.set("q", state.q.trim());
-    if (state.sort !== "year") p.set("sort", state.sort);
+    if (state.sort !== "tier") p.set("sort", state.sort);
     const qs = p.toString();
     const nextUrl = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
     window.history.replaceState(null, "", nextUrl);
@@ -332,7 +363,11 @@
     renderAllFilterChips();
     syncQueryParams();
 
-    els.gallery.innerHTML = "";
+    if (window.scrollY > 360) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    resetGalleryContainer();
     els.empty.hidden = list.length > 0;
     els.endHint.hidden = true;
     renderNextBatch();
@@ -342,6 +377,8 @@
     const card = document.createElement("article");
     card.className = "fig-card";
 
+    const w = fig.w > 0 ? fig.w : 1200;
+    const h = fig.h > 0 ? fig.h : 800;
     const famClass = `pill-${fig.family}`;
     const flagshipBadge =
       fig.tier === "flagship"
@@ -357,7 +394,7 @@
 
     card.innerHTML = `
       <div class="fig-thumb-wrap" data-idx="${idx}">
-        <img src="${fig.image}" alt="${escapeHtml(fig.title)}" loading="lazy" decoding="async" width="${fig.w}" height="${fig.h}">
+        <img src="${fig.image}" alt="${escapeHtml(fig.title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" width="${w}" height="${h}" style="aspect-ratio: ${w} / ${h};">
         <div class="fig-top-badges">
           <span class="pill-badge ${famClass}">${escapeHtml(fig.journal_short || fig.journal)} · ${fig.year}</span>
           ${flagshipBadge}
@@ -380,6 +417,17 @@
       </div>
     `;
 
+    const imgEl = card.querySelector("img");
+    imgEl.addEventListener("error", () => {
+      if (imgEl.dataset.fallbackDone) return;
+      imgEl.dataset.fallbackDone = "1";
+      const wrap = card.querySelector(".fig-thumb-wrap");
+      const fb = document.createElement("div");
+      fb.className = "fig-img-fallback";
+      fb.textContent = `${fig.journal} · ${fig.figure_label || "Figure 1"}`;
+      imgEl.replaceWith(fb);
+    });
+
     card.querySelector(".fig-thumb-wrap").addEventListener("click", () => openLightbox(idx));
     card.querySelector(".fig-title").addEventListener("click", () => openLightbox(idx));
     card.querySelectorAll(".swatch-dot").forEach((btn) => {
@@ -393,6 +441,23 @@
     return card;
   }
 
+  function checkSentinelVisible() {
+    if (state.renderedCount >= state.filtered.length || els.sentinel.hidden) return;
+    const rect = els.sentinel.getBoundingClientRect();
+    if (rect.top <= window.innerHeight + 420) {
+      renderNextBatch();
+    }
+  }
+
+  function scheduleScrollCheck() {
+    if (scrollCheckScheduled) return;
+    scrollCheckScheduled = true;
+    requestAnimationFrame(() => {
+      scrollCheckScheduled = false;
+      checkSentinelVisible();
+    });
+  }
+
   function renderNextBatch() {
     if (state.renderedCount >= state.filtered.length) {
       els.sentinel.hidden = true;
@@ -402,12 +467,30 @@
       }
       return;
     }
+
     const end = Math.min(state.renderedCount + PAGE_SIZE, state.filtered.length);
-    const frag = document.createDocumentFragment();
-    for (let i = state.renderedCount; i < end; i++) {
-      frag.appendChild(createCard(state.filtered[i], i));
+    if (state.layout === "masonry") {
+      if (!masonryCols.length) resetGalleryContainer();
+      const frags = masonryCols.map(() => document.createDocumentFragment());
+      for (let i = state.renderedCount; i < end; i++) {
+        const fig = state.filtered[i];
+        let minCol = 0;
+        for (let c = 1; c < masonryHeights.length; c++) {
+          if (masonryHeights[c] < masonryHeights[minCol]) minCol = c;
+        }
+        frags[minCol].appendChild(createCard(fig, i));
+        const ratio = fig.w > 0 && fig.h > 0 ? Math.min(fig.h / fig.w, 1.5) : 0.7;
+        masonryHeights[minCol] += ratio + 0.48;
+      }
+      frags.forEach((f, c) => masonryCols[c].appendChild(f));
+    } else {
+      const frag = document.createDocumentFragment();
+      for (let i = state.renderedCount; i < end; i++) {
+        frag.appendChild(createCard(state.filtered[i], i));
+      }
+      els.gallery.appendChild(frag);
     }
-    els.gallery.appendChild(frag);
+
     state.renderedCount = end;
 
     const more = state.renderedCount < state.filtered.length;
@@ -415,6 +498,8 @@
     if (!more && state.filtered.length > 0) {
       els.endHint.hidden = false;
       els.endHint.textContent = t("endHint").replace("{n}", state.filtered.length);
+    } else if (more) {
+      scheduleScrollCheck();
     }
   }
 
@@ -424,10 +509,12 @@
     const fig = state.filtered[idx];
 
     els.lbImgWrap.classList.remove("zoomed");
+    els.lbImg.referrerPolicy = "no-referrer";
     els.lbImg.src = fig.image;
     els.lbImg.alt = fig.title;
     if (fig.highres && fig.highres !== fig.image) {
       const hi = new Image();
+      hi.referrerPolicy = "no-referrer";
       hi.onload = () => {
         if (state.lbIndex === idx) els.lbImg.src = fig.highres;
       };
@@ -551,6 +638,13 @@
     state.layout = state.layout === "masonry" ? "grid" : "masonry";
     localStorage.setItem("ncs_layout", state.layout);
     applyLayout();
+    const prevCount = state.renderedCount || PAGE_SIZE;
+    state.renderedCount = 0;
+    resetGalleryContainer();
+    const target = Math.min(prevCount, state.filtered.length);
+    while (state.renderedCount < target) {
+      renderNextBatch();
+    }
   });
   els.langToggle.addEventListener("click", () => {
     state.lang = state.lang === "zh" ? "en" : "zh";
@@ -621,9 +715,27 @@
     (entries) => {
       if (entries.some((en) => en.isIntersecting)) renderNextBatch();
     },
-    { rootMargin: "320px" }
+    { rootMargin: "420px" }
   );
   io.observe(els.sentinel);
+  els.sentinel.addEventListener("click", renderNextBatch);
+  window.addEventListener("scroll", scheduleScrollCheck, { passive: true });
+  window.addEventListener(
+    "resize",
+    () => {
+      if (state.layout === "masonry" && getMasonryColumnCount() !== currentColCount) {
+        const prevCount = state.renderedCount || PAGE_SIZE;
+        state.renderedCount = 0;
+        resetGalleryContainer();
+        const target = Math.min(prevCount, state.filtered.length);
+        while (state.renderedCount < target) {
+          renderNextBatch();
+        }
+      }
+      scheduleScrollCheck();
+    },
+    { passive: true }
+  );
 
   // Init
   applyTheme();

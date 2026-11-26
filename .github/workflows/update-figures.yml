@@ -1,12 +1,18 @@
-name: Update OA NCS Figures
+name: Monthly Update OA NCS Figures
 
 on:
   schedule:
-    - cron: "0 3 * * 1"
+    - cron: "0 3 1 * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-monthly-update"
+  cancel-in-progress: false
 
 jobs:
   update:
@@ -20,8 +26,8 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: pip install requests pillow
-      - name: Crawl 2024-2026 OA NCS figures
-        run: python -X utf8 scripts/crawl_ncs_figures.py --merge --target-total 3500 --workers 24
+      - name: Crawl latest 3 years of OA NCS figures
+        run: python -X utf8 scripts/crawl_ncs_figures.py --merge --target-total 3600 --workers 24
       - name: Validate dataset
         run: python -X utf8 scripts/validate_gallery.py
       - name: Commit updated dataset
@@ -29,5 +35,27 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/figures.json assets/figures.js
-          git diff --cached --quiet || git commit -m "chore: update OA NCS paper figures"
+          git diff --cached --quiet || git commit -m "chore: monthly update OA NCS paper figures"
           git push
+
+  deploy:
+    needs: update
+    if: success()
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
