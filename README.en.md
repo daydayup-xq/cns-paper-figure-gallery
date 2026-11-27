@@ -234,3 +234,10 @@ If this gallery helped you find figure layout and color palette inspiration, fee
 <sub>Click the WeChat QR code to view full size, or visit the web <a href="https://daydayup-xq.github.io/cns-paper-figure-gallery/support.html">Support Page ↗</a>.</sub>
 
 Tips are completely voluntary and any amount is appreciated. Starring on GitHub, sharing with colleagues, and opening issues help just as much!
+
+## 🙏 Acknowledgments
+
+- **Inspiration**: This project was deeply inspired by [Top-Conf Figure Gallery (`qwdwqfwq/topconf-paper-figure-gallery`)](https://github.com/qwdwqfwq/topconf-paper-figure-gallery) in its open-source curation model, gallery workflow, and user-facing presentation. Sincere thanks to its author for pioneering such a helpful resource for the research community.
+- **Open Scholarly Data**: Grateful to [OpenAlex](https://openalex.org/) for open bibliographic metadata APIs, and to [NCBI E-Utilities](https://www.ncbi.nlm.nih.gov/books/NBK25501/) and the [PubMed Central Open Access Subset](https://pmc.ncbi.nlm.nih.gov/tools/openftlist/) for open-access full-text XML and figure resources.
+- **Community**: Thanks to all researchers and open-source contributors advancing reproducible scientific visualization.
+

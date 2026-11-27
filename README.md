@@ -234,3 +234,10 @@ python -X utf8 scripts/validate_gallery.py
 <sub>点击微信收款码可查看原图；手机浏览可保存图片，在微信扫一扫中从相册选择。也可访问网页端 <a href="https://daydayup-xq.github.io/cns-paper-figure-gallery/support.html">支持页面 ↗</a>。</sub>
 
 打赏完全自愿，金额随意。感谢你的支持，点个 **Star**、分享给同伴和提 Issue 反馈也同样重要。
+
+## 🙏 致谢
+
+- 灵感致谢：本项目在立项设计、开源展示形式与部分使用引导思路上，深受开源项目 [Top-Conf Figure Gallery (`qwdwqfwq/topconf-paper-figure-gallery`)](https://github.com/qwdwqfwq/topconf-paper-figure-gallery) 启发，在此向原作者表达诚挚感谢。
+- 数据与开放获取支持：感谢 [OpenAlex](https://openalex.org/) 提供开放文献检索接口，以及 [NCBI E-Utilities](https://www.ncbi.nlm.nih.gov/books/NBK25501/) 与 [PubMed Central Open Access Subset](https://pmc.ncbi.nlm.nih.gov/tools/openftlist/) 提供的开放获取论文与配图数据支持。
+- 技术与设计参考：感谢所有为科研绘图、数据可视化与开源社区贡献工具与灵感的开发者与科研作者。
+
