@@ -5,6 +5,8 @@
   const META = window.GALLERY_META || {};
   const PAGE_SIZE = 40;
   const LAYOUT_MODES = ["masonry", "grid", "compact"];
+  const PUBLIC_API_BASE = "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1";
+  const JOURNAL_SORT_ORDER = { Nature: 0, Science: 1, Cell: 2 };
 
   let masonryCols = [];
   let masonryHeights = [];
@@ -25,6 +27,7 @@
     pattern: "all",
     journal: "all",
     sort: "tier",
+    pmFilter: "all",
     renderedCount: 0,
     filtered: [],
     lbIndex: -1,
@@ -95,6 +98,10 @@
     pm: document.getElementById("palette-modal"),
     pmBackdrop: document.getElementById("pm-backdrop"),
     pmClose: document.getElementById("pm-close"),
+    pmFilters: document.getElementById("pm-filters"),
+    pmCopyPrompt: document.getElementById("pm-copy-prompt"),
+    pmCopyCuratedUrl: document.getElementById("pm-copy-curated-url"),
+    pmCopyIndexUrl: document.getElementById("pm-copy-index-url"),
     pmGrid: document.getElementById("pm-grid"),
     sm: document.getElementById("support-modal"),
     smBackdrop: document.getElementById("sm-backdrop"),
@@ -872,8 +879,7 @@
     }
   }
 
-  function openDeepLinkedFigure() {
-    const targetId = getDeepLinkFigureId();
+  function openFigureById(targetId) {
     if (!targetId) return;
     let idx = state.filtered.findIndex((f) => f.id === targetId);
     if (idx < 0 && ALL_FIGURES.some((f) => f.id === targetId)) {
@@ -885,36 +891,175 @@
     }
   }
 
-  function openPaletteStudio() {
-    const items = state.filtered.slice(0, 36);
+  function openDeepLinkedFigure() {
+    openFigureById(getDeepLinkFigureId());
+  }
+
+  function getAllCuratedFigures() {
+    return ALL_FIGURES.filter(isCurated).sort((a, b) => {
+      const ja = JOURNAL_SORT_ORDER[a.journal] ?? 99;
+      const jb = JOURNAL_SORT_ORDER[b.journal] ?? 99;
+      return ja - jb || b.year - a.year || a.id.localeCompare(b.id);
+    });
+  }
+
+  function buildAgentImportPrompt() {
+    if (state.lang === "en") {
+      return [
+        "Please fetch verified Nature/Science/Cell flagship figure palettes and layout blueprints from the CNS Paper Figure Gallery static Agent API:",
+        `- Lightweight index: ${PUBLIC_API_BASE}/index.json`,
+        `- Full curated bundle (roles + layout_notes): ${PUBLIC_API_BASE}/curated.json`,
+        "Select the entry that best matches my research domain and figure type, strictly follow palette.roles (primary / accent / neutral / background) and reference.layout_notes, and generate the plotting code."
+      ].join("\n");
+    }
+    return [
+      "请从 CNS Paper Figure Gallery 静态 Agent 接口读取已核对的 Nature/Science/Cell 正刊主图配色与版式参考：",
+      `- 轻量索引：${PUBLIC_API_BASE}/index.json`,
+      `- 全量精选（含色板角色与版式说明）：${PUBLIC_API_BASE}/curated.json`,
+      "请结合我的研究方向与图表类型，从中挑选最匹配的正刊条目，严格按 palette.roles（primary / accent / neutral / background）与 reference.layout_notes 设计配图并输出绘图代码。"
+    ].join("\n");
+  }
+
+  function renderPaletteStudioFilters(curatedAll) {
+    if (!els.pmFilters) return;
+    els.pmFilters.innerHTML = "";
+    const counts = {
+      all: curatedAll.length,
+      Nature: curatedAll.filter((f) => f.journal === "Nature").length,
+      Science: curatedAll.filter((f) => f.journal === "Science").length,
+      Cell: curatedAll.filter((f) => f.journal === "Cell").length,
+      "cb-safe": curatedAll.filter((f) => Boolean(f.palette_curated && f.palette_curated.colorblind_safe)).length,
+    };
+    const tabs = [
+      { value: "all", label: t("pm.filterAll") },
+      { value: "Nature", label: "Nature" },
+      { value: "Science", label: "Science" },
+      { value: "Cell", label: "Cell" },
+      { value: "cb-safe", label: t("pm.filterCbSafe") },
+    ];
+    tabs.forEach((tab) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "pm-filter-chip" + (state.pmFilter === tab.value ? " active" : "");
+      btn.setAttribute("data-pm-filter", tab.value);
+      btn.innerHTML = `<span>${escapeHtml(tab.label)}</span><span class="chip-cnt">${counts[tab.value] || 0}</span>`;
+      btn.addEventListener("click", () => {
+        state.pmFilter = tab.value;
+        renderPaletteStudioFilters(curatedAll);
+        renderPaletteStudioCards(curatedAll);
+      });
+      els.pmFilters.appendChild(btn);
+    });
+  }
+
+  function renderPaletteStudioCards(curatedAll) {
     els.pmGrid.innerHTML = "";
+    const items = curatedAll.filter((fig) => {
+      if (state.pmFilter === "cb-safe") {
+        return Boolean(fig.palette_curated && fig.palette_curated.colorblind_safe);
+      }
+      if (state.pmFilter !== "all") {
+        return fig.journal === state.pmFilter;
+      }
+      return true;
+    });
+
+    if (!items.length) {
+      els.pmGrid.innerHTML = `<div class="pm-empty">${escapeHtml(t("pm.empty"))}</div>`;
+      return;
+    }
+
     items.forEach((fig) => {
       const card = document.createElement("div");
       card.className = "pm-card";
       const pal = getEffectivePaletteHexes(fig);
-      const curatedTag = isCurated(fig)
-        ? `<span class="pm-curated-tag">${escapeHtml(t("curated.badge"))}</span>`
+      const roleSwatches = getCuratedSwatches(fig, true);
+      const roles = fig.palette_curated.roles || {};
+      const cbPill = fig.palette_curated.colorblind_safe
+        ? `<span class="cb-safe-pill">✓ ${escapeHtml(t("curated.cbSafe"))}</span>`
         : "";
-      const bar = pal
-        .map((hex) => `<span style="background:${hex}" title="${hex}" data-hex="${hex}"></span>`)
+      const swatchesHtml = roleSwatches
+        .map(
+          (sw) =>
+            `<button type="button" class="pm-role-swatch" data-hex="${sw.hex}" title="${escapeHtml(sw.roleLabel)} · ${sw.hex}">
+              <span class="pm-role-color" style="background:${sw.hex}"></span>
+              <span class="pm-role-hex">${sw.hex}</span>
+              <span class="pm-role-name">${escapeHtml(sw.roleLabel)}</span>
+            </button>`
+        )
         .join("");
+
       card.innerHTML = `
-        <div class="pm-card-title">${escapeHtml(fig.journal_short || fig.journal)} · ${fig.year}${curatedTag}</div>
-        <div class="pm-card-sub">${escapeHtml(fig.title.slice(0, 66))}${fig.title.length > 66 ? "…" : ""}</div>
-        <div class="pm-bar">${bar}</div>
-        <div style="display:flex;gap:6px;justify-content:space-between;align-items:center;">
-          <span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--soft)">${pal.join(" ")}</span>
-          <button class="mini-btn pm-copy-py" type="button">Copy Py</button>
+        <div class="pm-card-head">
+          <div class="pm-card-journal">
+            <span class="journal-bar bar-${fig.family}"></span>
+            <strong>${escapeHtml(fig.journal)} · ${fig.year}</strong>
+            <span class="pm-meta-pill">${escapeHtml(t("disc." + fig.discipline))}</span>
+            <span class="pm-meta-pill">${escapeHtml(t("pat." + fig.pattern))}</span>
+          </div>
+          ${cbPill}
+        </div>
+        <div class="pm-card-body">
+          <img class="pm-card-thumb" src="${fig.image}" alt="${escapeHtml(fig.title)}" loading="lazy" referrerpolicy="no-referrer">
+          <div class="pm-card-info">
+            <div class="pm-card-title" title="${escapeHtml(fig.title)}">${escapeHtml(fig.title)}</div>
+            <p class="pm-card-notes">${escapeHtml(fig.palette_curated.layout_notes || "")}</p>
+          </div>
+        </div>
+        <div class="pm-role-swatches">${swatchesHtml}</div>
+        <div class="pm-card-actions">
+          <div class="pm-export-group">
+            <button class="mini-btn pm-copy-py" type="button">Python</button>
+            <button class="mini-btn pm-copy-r" type="button">R</button>
+            <button class="mini-btn pm-copy-css" type="button">CSS</button>
+          </div>
+          <div class="pm-export-group">
+            <button class="mini-btn pm-copy-agent-url" type="button">${escapeHtml(t("pm.copyItemUrl"))}</button>
+            <a class="mini-btn pm-json-link" href="${getAgentItemUrl(fig)}" target="_blank" rel="noopener noreferrer">JSON ↗</a>
+            <button class="mini-btn pm-inspect-btn" type="button">${escapeHtml(t("pm.viewLightbox"))}</button>
+          </div>
         </div>
       `;
-      card.querySelectorAll(".pm-bar span").forEach((s) => {
-        s.addEventListener("click", () => copyText(s.getAttribute("data-hex"), s.getAttribute("data-hex")));
+
+      card.querySelectorAll(".pm-role-swatch").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const hex = btn.getAttribute("data-hex");
+          copyText(hex, hex);
+        });
       });
       card.querySelector(".pm-copy-py").addEventListener("click", () => {
         copyText(`palette = ${JSON.stringify(pal)}`, "Python palette");
       });
+      card.querySelector(".pm-copy-r").addEventListener("click", () => {
+        copyText(`palette <- c(${pal.map((c) => `"${c}"`).join(", ")})`, "R vector");
+      });
+      card.querySelector(".pm-copy-css").addEventListener("click", () => {
+        const cssLines = [];
+        (roles.primary || []).forEach((c, i) => cssLines.push(`--cns-primary-${i + 1}: ${String(c).toUpperCase()};`));
+        if (roles.accent) cssLines.push(`--cns-accent: ${String(roles.accent).toUpperCase()};`);
+        if (roles.neutral) cssLines.push(`--cns-neutral: ${String(roles.neutral).toUpperCase()};`);
+        if (roles.background) cssLines.push(`--cns-bg: ${String(roles.background).toUpperCase()};`);
+        copyText(cssLines.join("\n"), "CSS variables");
+      });
+      card.querySelector(".pm-copy-agent-url").addEventListener("click", () => {
+        copyText(`${PUBLIC_API_BASE}/items/${encodeURIComponent(fig.id)}.json`, "Agent JSON URL");
+      });
+      const inspectHandler = () => {
+        els.pm.hidden = true;
+        openFigureById(fig.id);
+      };
+      card.querySelector(".pm-inspect-btn").addEventListener("click", inspectHandler);
+      card.querySelector(".pm-card-thumb").addEventListener("click", inspectHandler);
+      card.querySelector(".pm-card-title").addEventListener("click", inspectHandler);
+
       els.pmGrid.appendChild(card);
     });
+  }
+
+  function openPaletteStudio() {
+    const curatedAll = getAllCuratedFigures();
+    renderPaletteStudioFilters(curatedAll);
+    renderPaletteStudioCards(curatedAll);
     els.pm.hidden = false;
   }
 
@@ -1063,6 +1208,21 @@
   els.paletteStudioBtn.addEventListener("click", openPaletteStudio);
   els.pmClose.addEventListener("click", () => (els.pm.hidden = true));
   els.pmBackdrop.addEventListener("click", () => (els.pm.hidden = true));
+  if (els.pmCopyPrompt) {
+    els.pmCopyPrompt.addEventListener("click", () => {
+      copyText(buildAgentImportPrompt(), t("pm.copyPrompt"));
+    });
+  }
+  if (els.pmCopyCuratedUrl) {
+    els.pmCopyCuratedUrl.addEventListener("click", () => {
+      copyText(`${PUBLIC_API_BASE}/curated.json`, "curated.json URL");
+    });
+  }
+  if (els.pmCopyIndexUrl) {
+    els.pmCopyIndexUrl.addEventListener("click", () => {
+      copyText(`${PUBLIC_API_BASE}/index.json`, "index.json URL");
+    });
+  }
   if (els.supportBtn && els.sm) {
     els.supportBtn.addEventListener("click", () => (els.sm.hidden = false));
     if (els.smClose) els.smClose.addEventListener("click", () => (els.sm.hidden = true));

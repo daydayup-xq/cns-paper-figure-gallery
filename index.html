@@ -12,7 +12,7 @@
 <meta property="og:image" content="https://daydayup-xq.github.io/cns-paper-figure-gallery/docs/banner.png">
 <link rel="canonical" href="https://daydayup-xq.github.io/cns-paper-figure-gallery/">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="stylesheet" href="assets/style.css?v=20261127b">
+<link rel="stylesheet" href="assets/style.css?v=20261127c">
 </head>
 <body>
 
@@ -39,7 +39,7 @@
 
     <div class="hero-right">
       <div class="topbar-actions">
-        <button id="palette-studio-btn" class="action-btn accent-btn" type="button" data-i18n="btn.paletteStudio">🎨 顶刊色卡库</button>
+        <button id="palette-studio-btn" class="action-btn accent-btn" type="button" data-i18n="btn.paletteStudio">✨ 精选色系 · Agent</button>
         <button id="support-btn" class="action-btn support-btn" type="button" aria-haspopup="dialog" aria-controls="support-modal" data-i18n="btn.support">♡ 支持作者</button>
         <button id="theme-toggle" class="action-btn icon-btn" type="button" title="切换深浅色 / Toggle Theme">🌙</button>
         <button id="lang-toggle" class="action-btn" type="button" title="Switch language">中 / EN</button>
@@ -267,17 +267,30 @@
   </div>
 </div>
 
-<!-- Palette Studio Modal -->
+<!-- Curated Palettes & Agent Hub Modal -->
 <div id="palette-modal" class="modal" hidden>
   <div class="modal-backdrop" id="pm-backdrop"></div>
-  <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+  <div class="modal-dialog pm-dialog" role="dialog" aria-modal="true" aria-labelledby="pm-title">
     <div class="modal-head">
       <div>
-        <h2 id="pm-title" data-i18n="pm.title">🎨 CNS 顶刊色卡灵感库</h2>
-        <p class="modal-sub" data-i18n="pm.sub">按当前筛选结果实时汇总高频顶刊配色，一键复制可用于 matplotlib / ggplot2 / Illustrator。</p>
+        <h2 id="pm-title" data-i18n="pm.title">✨ CNS 正刊精选色系 · Agent 接入</h2>
+        <p class="modal-sub" data-i18n="pm.sub">收录经高清原图视觉与像素核对的 Nature / Science / Cell 正刊色板与版式骨架，支持一键复制给科研绘图 Agent 或导出 Python / R / CSS。</p>
       </div>
       <button id="pm-close" class="lightbox-close static-close" type="button" aria-label="Close">×</button>
     </div>
+
+    <div class="pm-toolbar">
+      <div class="pm-agent-bar" id="pm-agent-bar">
+        <span class="pm-agent-label" data-i18n="pm.agentLabel">🤖 Agent 一键导入</span>
+        <button id="pm-copy-prompt" class="pm-agent-btn primary" type="button" data-i18n="pm.copyPrompt">📋 复制 Agent 接入提示词</button>
+        <button id="pm-copy-curated-url" class="pm-agent-btn" type="button" data-i18n="pm.copyCuratedUrl">复制 curated.json URL</button>
+        <button id="pm-copy-index-url" class="pm-agent-btn" type="button" data-i18n="pm.copyIndexUrl">复制 index.json URL</button>
+        <a class="pm-agent-link" href="api/v1/curated.json" target="_blank" rel="noopener noreferrer">curated.json ↗</a>
+        <a class="pm-agent-link" href="api/v1/index.json" target="_blank" rel="noopener noreferrer">index.json ↗</a>
+      </div>
+      <div class="pm-filters" id="pm-filters" role="group" aria-label="Curated palette filters"></div>
+    </div>
+
     <div id="pm-grid" class="pm-grid"></div>
   </div>
 </div>
@@ -312,8 +325,8 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<script src="assets/i18n.js?v=20261127a"></script>
+<script src="assets/i18n.js?v=20261127c"></script>
 <script src="assets/figures.js?v=20261127a"></script>
-<script src="assets/app.js?v=20261127a"></script>
+<script src="assets/app.js?v=20261127c"></script>
 </body>
 </html>

@@ -134,7 +134,7 @@ Pattern tags classify figures by visual communication structure rather than rese
 
 ## 🎨 Scientific Color Palettes
 
-Click any swatch in a card's bottom color bar to copy its HEX code or hit `Py` to copy the full Python list. Open **🎨 Palette Studio** in the top header to browse up to 36 palettes live-filtered to your current selection, or export ready-to-paste **Python / R / CSS** from any figure's Lightbox:
+Click any swatch in a card's bottom color bar to copy its HEX code or hit `Py` to copy the full Python list (curated entries prioritize verified semantic role palettes with a direct `Agent JSON ↗` link). Open **✨ Curated & Agent** in the top header to browse all visually & pixel-verified CNS flagship palettes and layout blueprints, copy a ready-to-paste Agent prompt or static JSON URL in one click, or export **Python / R / CSS** from any card or Lightbox:
 
 ```python
 # Exported from card "Py" or Lightbox -> "Python"
