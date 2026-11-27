@@ -81,7 +81,16 @@ window.I18N = {
     "pat.characterization": "🗺️ 结构与空间图谱",
     "copied": "已复制 ",
     "showing": "共 {n} / {total} 张主图",
-    "endHint": "已显示全部 {n} 张符合条件的 CNS Open Access 主图"
+    "endHint": "已显示全部 {n} 张符合条件的 CNS Open Access 主图",
+    "curated.badge": "✨ 精选色系",
+    "curated.agentJson": "Agent JSON ↗",
+    "curated.lbTitle": "✨ 精选色系（按语义排序，点击复制 HEX）",
+    "curated.layoutLabel": "版式参考",
+    "curated.cbSafe": "色盲友好",
+    "curated.role.primary": "主色",
+    "curated.role.accent": "强调",
+    "curated.role.neutral": "中性",
+    "curated.role.background": "底色"
   },
   en: {
     "tagline": "All-Discipline Cell / Nature / Science Flagship & Sub-Journals · 2024–2026 Open Access Figure Gallery",
@@ -165,6 +174,15 @@ window.I18N = {
     "pat.characterization": "🗺️ Structure & Atlas",
     "copied": "Copied ",
     "showing": "Showing {n} / {total} figures",
-    "endHint": "Displayed all {n} matching CNS Open Access figures"
+    "endHint": "Displayed all {n} matching CNS Open Access figures",
+    "curated.badge": "✨ Curated",
+    "curated.agentJson": "Agent JSON ↗",
+    "curated.lbTitle": "✨ Curated Palette (by role, click to copy HEX)",
+    "curated.layoutLabel": "Layout Notes",
+    "curated.cbSafe": "Colorblind-safe",
+    "curated.role.primary": "Primary",
+    "curated.role.accent": "Accent",
+    "curated.role.neutral": "Neutral",
+    "curated.role.background": "BG"
   }
 };

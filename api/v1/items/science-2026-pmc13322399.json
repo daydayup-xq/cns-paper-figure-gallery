@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "id": "science-2026-pmc13322399",
+  "meta": {
+    "title": "A global map for introgressed structural variation and selection in humans",
+    "journal": "Science",
+    "journal_tier": "flagship",
+    "year": 2026,
+    "discipline": "inter-soc",
+    "figure_type": "characterization"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=science-2026-pmc13322399",
+    "image_hd": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13322399.1/nihms-2190982-f0001.webp",
+    "doi": "https://doi.org/10.1126/science.adz7518",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13322399/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#0072B4",
+        "#E18826",
+        "#BD3C2A",
+        "#208950",
+        "#7976B1",
+        "#6F9CAC"
+      ],
+      "accent": "#BD3C2A",
+      "neutral": "#94959C",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": false
+  },
+  "reference": {
+    "layout_notes": "上统计下全基因组的双层演化基因组图谱：上方左右分置六大人群 PCA 散点图与累积组装 Contig 阶梯曲线，下方双列排布 24 条人类染色体核型条带，并用高对比青、黄、绿三色标注缺失、插入与倒位变异。"
+  }
+}

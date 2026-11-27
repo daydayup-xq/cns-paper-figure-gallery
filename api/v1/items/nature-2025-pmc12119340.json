@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "id": "nature-2025-pmc12119340",
+  "meta": {
+    "title": "End-to-end data-driven weather prediction",
+    "journal": "Nature",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "energy-env",
+    "figure_type": "pipeline"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc12119340",
+    "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-025-08897-0/MediaObjects/41586_2025_8897_Fig1_HTML.png",
+    "doi": "https://doi.org/10.1038/s41586-025-08897-0",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12119340/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#4961CB",
+        "#E26A53",
+        "#DAEEFA",
+        "#FFF5B4",
+        "#FFECEC"
+      ],
+      "accent": "#E26A53",
+      "neutral": "#797776",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": true
+  },
+  "reference": {
+    "layout_notes": "上下双区结合全球地图与模型流水线：上方分两行陈列 6 幅红蓝发散色阶的卫星与站点观测地图，下方以浅蓝编码框、淡粉迭代处理框与淡黄解码框构成从左到右的端到端天气预报架构。"
+  }
+}

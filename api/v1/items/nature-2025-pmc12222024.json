@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "id": "nature-2025-pmc12222024",
+  "meta": {
+    "title": "The pivot penalty in research",
+    "journal": "Nature",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "inter-soc",
+    "figure_type": "pipeline"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc12222024",
+    "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-025-09048-1/MediaObjects/41586_2025_9048_Fig1_HTML.png",
+    "doi": "https://doi.org/10.1038/s41586-025-09048-1",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12222024/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#F7C113",
+        "#7CAED3",
+        "#F37621",
+        "#4F8798",
+        "#A6B188"
+      ],
+      "accent": "#A12F2E",
+      "neutral": "#BFA796",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": true
+  },
+  "reference": {
+    "layout_notes": "上概念下分布的编辑级信息图：顶部横向排列色彩编码的期刊卡片并汇聚为水平研究向量条，对比小幅与大幅研究转向（余弦距离）；底部左右双柱状密度图分别呈现论文与专利的转向幅度分布。"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "id": "science-2025-pmc13698566",
+  "meta": {
+    "title": "Bridging the pyridine-pyridazine synthesis gap by skeletal editing",
+    "journal": "Science",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "mat-chem",
+    "figure_type": "multipanel"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=science-2025-pmc13698566",
+    "image_hd": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13698566.1/nihms-2215399-f0001.webp",
+    "doi": "https://doi.org/10.1126/science.adx4762",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13698566/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#4E81E9",
+        "#B20103",
+        "#762E7A"
+      ],
+      "accent": "#B20103",
+      "neutral": "#828B9B",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": true
+  },
+  "reference": {
+    "layout_notes": "细灰线分隔的 2×2 四象限合成化学总览图：左上对比吡啶与哒嗪库占比鸿沟，右上展示代表性药物分子，下方两区并列碳-氮骨架编辑反应路径、390 nm 光催化条件与浅灰底关键中间体框。"
+  }
+}

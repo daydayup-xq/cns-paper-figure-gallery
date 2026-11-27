@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "id": "cell-2025-pmc12340670",
+  "meta": {
+    "title": "Norepinephrine-mediated slow vasomotion drives glymphatic clearance during sleep",
+    "journal": "Cell",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "bio-med",
+    "figure_type": "graphical-abstract"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=cell-2025-pmc12340670",
+    "image_hd": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867424013436-fx1_lrg.jpg",
+    "doi": "https://doi.org/10.1016/j.cell.2024.11.027",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12340670/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#026532",
+        "#229ABF",
+        "#90D4D7",
+        "#ED7C5B"
+      ],
+      "accent": "#C1494C",
+      "neutral": "#A7A8AC",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": false
+  },
+  "reference": {
+    "layout_notes": "左右镜像对照式双栏视觉摘要（清醒 vs NREM 睡眠）：顶部为极简矢量化小鼠状态插图，中部浅蓝绿方框内纵向叠加去甲肾上腺素波形、珊瑚红动脉脉动与血管周隙流向箭头，底部以冠状脑切片渐变箭头呼应脑脊液清除机制。"
+  }
+}

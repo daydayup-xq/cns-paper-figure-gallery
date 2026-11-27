@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "id": "nature-2025-pmc12727508",
+  "meta": {
+    "title": "A fault-tolerant neutral-atom architecture for universal quantum computation",
+    "journal": "Nature",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "phys-eng",
+    "figure_type": "pipeline"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc12727508",
+    "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-025-09848-5/MediaObjects/41586_2025_9848_Fig1_HTML.png",
+    "doi": "https://doi.org/10.1038/s41586-025-09848-5",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12727508/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#294D76",
+        "#6E97C3",
+        "#A3BFDC",
+        "#F2AF89"
+      ],
+      "accent": "#8E0F1D",
+      "neutral": "#605D60",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": true
+  },
+  "reference": {
+    "layout_notes": "左架构右实验的多面板量子物理主图：左侧以细线框划分容错操作、存储/纠缠/读出阵列与底层机制，右侧串联光晶格读出流程、d=5 表面码阵列及蓝灰渐变误差曲线，用深酒红标示误差与物理熵节点。"
+  }
+}

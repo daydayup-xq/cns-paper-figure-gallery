@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "id": "cell-2025-pmc12790861",
+  "meta": {
+    "title": "A generative deep learning approach to de novo antibiotic design",
+    "journal": "Cell",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "bio-med",
+    "figure_type": "mechanism"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=cell-2025-pmc12790861",
+    "image_hd": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867425008554-gr1_lrg.jpg",
+    "doi": "https://doi.org/10.1016/j.cell.2025.07.033",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12790861/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#293371",
+        "#723E7E",
+        "#565891",
+        "#4786BB",
+        "#B69CBA"
+      ],
+      "accent": "#991A23",
+      "neutral": "#94908F",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": false
+  },
+  "reference": {
+    "layout_notes": "A–G 七面板紫蓝同色系药物发现总览图：上方依次排列三段圆角流程框、分子片段化学空间散点图与预测分位数曲线，下方以纵向灰阶漏斗串联 4500 万片段筛选、命中排序、高亮紫边核心骨架及蓝紫渐变柱状图，少量暗红锚定已知抗生素对照。"
+  }
+}

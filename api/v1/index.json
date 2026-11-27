@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T08:56:13Z",
+  "base_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery",
+  "count": 10,
+  "items": [
+    {
+      "id": "nature-2025-pmc11711098",
+      "journal": "Nature",
+      "year": 2025,
+      "discipline": "ai-comp",
+      "figure_type": "pipeline",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/nature-2025-pmc11711098.json",
+      "primary_colors": [
+        "#7BAFCD",
+        "#FF9263",
+        "#D5E0EF",
+        "#DFEEE8"
+      ]
+    },
+    {
+      "id": "nature-2025-pmc12119340",
+      "journal": "Nature",
+      "year": 2025,
+      "discipline": "energy-env",
+      "figure_type": "pipeline",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/nature-2025-pmc12119340.json",
+      "primary_colors": [
+        "#4961CB",
+        "#E26A53",
+        "#DAEEFA",
+        "#FFF5B4",
+        "#FFECEC"
+      ]
+    },
+    {
+      "id": "nature-2025-pmc12222024",
+      "journal": "Nature",
+      "year": 2025,
+      "discipline": "inter-soc",
+      "figure_type": "pipeline",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/nature-2025-pmc12222024.json",
+      "primary_colors": [
+        "#F7C113",
+        "#7CAED3",
+        "#F37621",
+        "#4F8798",
+        "#A6B188"
+      ]
+    },
+    {
+      "id": "nature-2025-pmc12727508",
+      "journal": "Nature",
+      "year": 2025,
+      "discipline": "phys-eng",
+      "figure_type": "pipeline",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/nature-2025-pmc12727508.json",
+      "primary_colors": [
+        "#294D76",
+        "#6E97C3",
+        "#A3BFDC",
+        "#F2AF89"
+      ]
+    },
+    {
+      "id": "science-2026-pmc13322399",
+      "journal": "Science",
+      "year": 2026,
+      "discipline": "inter-soc",
+      "figure_type": "characterization",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/science-2026-pmc13322399.json",
+      "primary_colors": [
+        "#0072B4",
+        "#E18826",
+        "#BD3C2A",
+        "#208950",
+        "#7976B1",
+        "#6F9CAC"
+      ]
+    },
+    {
+      "id": "science-2025-pmc12288761",
+      "journal": "Science",
+      "year": 2025,
+      "discipline": "bio-med",
+      "figure_type": "mechanism",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/science-2025-pmc12288761.json",
+      "primary_colors": [
+        "#3073AC",
+        "#2AB0C0",
+        "#F9C82D",
+        "#F99179",
+        "#AAC32F"
+      ]
+    },
+    {
+      "id": "science-2025-pmc13698566",
+      "journal": "Science",
+      "year": 2025,
+      "discipline": "mat-chem",
+      "figure_type": "multipanel",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/science-2025-pmc13698566.json",
+      "primary_colors": [
+        "#4E81E9",
+        "#B20103",
+        "#762E7A"
+      ]
+    },
+    {
+      "id": "cell-2025-pmc12340670",
+      "journal": "Cell",
+      "year": 2025,
+      "discipline": "bio-med",
+      "figure_type": "graphical-abstract",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/cell-2025-pmc12340670.json",
+      "primary_colors": [
+        "#026532",
+        "#229ABF",
+        "#90D4D7",
+        "#ED7C5B"
+      ]
+    },
+    {
+      "id": "cell-2025-pmc12790861",
+      "journal": "Cell",
+      "year": 2025,
+      "discipline": "bio-med",
+      "figure_type": "mechanism",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/cell-2025-pmc12790861.json",
+      "primary_colors": [
+        "#293371",
+        "#723E7E",
+        "#565891",
+        "#4786BB",
+        "#B69CBA"
+      ]
+    },
+    {
+      "id": "cell-2024-pmc10965243",
+      "journal": "Cell",
+      "year": 2024,
+      "discipline": "bio-med",
+      "figure_type": "graphical-abstract",
+      "item_api_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/cell-2024-pmc10965243.json",
+      "primary_colors": [
+        "#216AAF",
+        "#1AA7E0",
+        "#DEE28C",
+        "#74B840"
+      ]
+    }
+  ]
+}

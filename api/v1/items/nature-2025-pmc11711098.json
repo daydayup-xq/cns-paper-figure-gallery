@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "id": "nature-2025-pmc11711098",
+  "meta": {
+    "title": "Accurate predictions on small data with a tabular foundation model",
+    "journal": "Nature",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "ai-comp",
+    "figure_type": "pipeline"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc11711098",
+    "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-024-08328-6/MediaObjects/41586_2024_8328_Fig1_HTML.png",
+    "doi": "https://doi.org/10.1038/s41586-024-08328-6",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11711098/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#7BAFCD",
+        "#FF9263",
+        "#D5E0EF",
+        "#DFEEE8"
+      ],
+      "accent": "#FF9263",
+      "neutral": "#7F7F7F",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": true
+  },
+  "reference": {
+    "layout_notes": "上下两段式 AI 框架总览：上方左右并列浅蓝与浅薄荷圆角分区对照预训练与实测推理，下方按从左到右数据流展示表格输入、2D TabPFN 注意力层与预测分布直方图，以珊瑚橙高亮待预测目标条目。"
+  }
+}

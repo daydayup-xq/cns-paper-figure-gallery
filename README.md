@@ -33,6 +33,7 @@
 
 [🌐 在线画廊](https://daydayup-xq.github.io/cns-paper-figure-gallery/) ·
 [🎨 实测色卡提取](#-实测色卡提取) ·
+[🤖 Agent 静态接口](#-agent-静态接口beta) ·
 [📊 收录规模](#-收录规模) ·
 [🧭 视觉模式](#-视觉模式) ·
 [🚀 快速开始](#-快速开始) ·
@@ -151,6 +152,61 @@ scale_color_manual(values = palette)
 
 ---
 
+## 🤖 Agent 静态接口（Beta）
+
+为方便科研绘图 Agent、脚本工作流或浏览器插件直接读取经视觉核对的正刊精选色板与版式骨架，站点发布目录内置了纯静态 JSON 接口（`schema_version: "1.0"`，无需鉴权，CORS 友好的 GitHub Pages 静态文件）：
+
+| 接口路径 | 用途说明 | 在线访问示例 |
+|---|---|---|
+| `api/v1/index.json` | 轻量检索清单（含 `id`、`journal`、`year`、`discipline`、`figure_type`、`item_api_url`、`primary_colors`） | [`index.json`](https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/index.json) |
+| `api/v1/curated.json` | 全量精选合集（一次性返回全部已核对条目完整字段，适合批量上下文注入） | [`curated.json`](https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/curated.json) |
+| `api/v1/items/{id}.json` | 单图详情接口（含论文元数据、高清原图直链、语义分角色色板与中文版式说明） | [`nature-2025-pmc11711098.json`](https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/nature-2025-pmc11711098.json) |
+
+### 单图接口字段结构示例
+
+```json
+{
+  "schema_version": "1.0",
+  "id": "nature-2025-pmc11711098",
+  "meta": {
+    "title": "Accurate predictions on small data with a tabular foundation model",
+    "journal": "Nature",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "ai-comp",
+    "figure_type": "pipeline"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc11711098",
+    "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-024-08328-6/MediaObjects/41586_2024_8328_Fig1_HTML.png",
+    "doi": "https://doi.org/10.1038/s41586-024-08328-6",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11711098/"
+  },
+  "palette": {
+    "roles": {
+      "primary": ["#7BAFCD", "#FF9263", "#D5E0EF", "#DFEEE8"],
+      "accent": "#FF9263",
+      "neutral": "#7F7F7F",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": true
+  },
+  "reference": {
+    "layout_notes": "上下两段式 AI 框架总览：上方左右并列浅蓝与浅薄荷圆角分区对照预训练与实测推理，下方按从左到右数据流展示表格输入、2D TabPFN 注意力层与预测分布直方图，以珊瑚橙高亮待预测目标条目。"
+  }
+}
+```
+
+- **双层色系兼容**：未核对条目保留原有 `palette` 自动提取色系；已通过视觉核对的条目在 `data/figures.json` 中新增 `palette_curated`（`status: "verified"`），画廊卡片自动优先展示精选角色色块并附带 `✨ 精选色系` 与 `Agent JSON ↗` 入口。
+- **确定性同步构建**：新增或修改 `palette_curated` 后，运行以下命令即可同步更新 `api/v1/` 与 `assets/figures.js`：
+
+```bash
+python -X utf8 scripts/build_agent_api.py
+python -X utf8 scripts/validate_gallery.py
+```
+
+---
+
 ## 🚀 快速开始
 
 在线浏览：**[GitHub Pages 在线画廊](https://daydayup-xq.github.io/cns-paper-figure-gallery/)**
@@ -177,6 +233,10 @@ python -X utf8 scripts/validate_gallery.py
 ├── index.html                  # 画廊主页（顶部筛选工作台 / 多视图 / 灯箱 / 配色库 / 支持作者弹窗）
 ├── support.html                # 独立赞赏支持与赞助伙伴页面（中英双语）
 ├── README.md / README.en.md    # 中英文项目文档
+├── api/v1/
+│   ├── index.json              # Agent 轻量精选索引清单
+│   ├── curated.json            # Agent 全量精选数据包
+│   └── items/{id}.json         # 单图完整元数据、角色色板与版式参考接口
 ├── assets/
 │   ├── style.css / app.js      # 样式与前端交互逻辑
 │   ├── i18n.js                 # 中英文切换词典
@@ -185,11 +245,12 @@ python -X utf8 scripts/validate_gallery.py
 │   └── wechat-pay.jpg          # 作者赞赏收款码
 ├── data/
 │   ├── journals.json           # 68 本 CNS 期刊配置与学科映射表
-│   └── figures.json            # 全量 5,270 条 OA 主图权威清单
+│   └── figures.json            # 全量 5,270 条 OA 主图权威清单（含可选 palette_curated）
 ├── docs/                       # 项目横幅与赞助伙伴视觉资产
 ├── scripts/
 │   ├── crawl_cns_figures.py    # OpenAlex + NCBI E-Utilities + 官方 CDN 采集与色板提取管线
-│   └── validate_gallery.py     # 数据完整性、尺寸、色板与静态资源校验
+│   ├── build_agent_api.py      # 从 palette_curated 生成 /api/v1/ 并同步 assets/figures.js
+│   └── validate_gallery.py     # 数据完整性、Agent API 与静态资源校验
 └── .github/workflows/          # Pages 部署与每月定时增量更新工作流
 ```
 

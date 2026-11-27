@@ -1,0 +1,363 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-27T08:56:13Z",
+  "base_url": "https://daydayup-xq.github.io/cns-paper-figure-gallery",
+  "count": 10,
+  "items": [
+    {
+      "schema_version": "1.0",
+      "id": "nature-2025-pmc11711098",
+      "meta": {
+        "title": "Accurate predictions on small data with a tabular foundation model",
+        "journal": "Nature",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "ai-comp",
+        "figure_type": "pipeline"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc11711098",
+        "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-024-08328-6/MediaObjects/41586_2024_8328_Fig1_HTML.png",
+        "doi": "https://doi.org/10.1038/s41586-024-08328-6",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11711098/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#7BAFCD",
+            "#FF9263",
+            "#D5E0EF",
+            "#DFEEE8"
+          ],
+          "accent": "#FF9263",
+          "neutral": "#7F7F7F",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": true
+      },
+      "reference": {
+        "layout_notes": "上下两段式 AI 框架总览：上方左右并列浅蓝与浅薄荷圆角分区对照预训练与实测推理，下方按从左到右数据流展示表格输入、2D TabPFN 注意力层与预测分布直方图，以珊瑚橙高亮待预测目标条目。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "nature-2025-pmc12119340",
+      "meta": {
+        "title": "End-to-end data-driven weather prediction",
+        "journal": "Nature",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "energy-env",
+        "figure_type": "pipeline"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc12119340",
+        "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-025-08897-0/MediaObjects/41586_2025_8897_Fig1_HTML.png",
+        "doi": "https://doi.org/10.1038/s41586-025-08897-0",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12119340/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#4961CB",
+            "#E26A53",
+            "#DAEEFA",
+            "#FFF5B4",
+            "#FFECEC"
+          ],
+          "accent": "#E26A53",
+          "neutral": "#797776",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": true
+      },
+      "reference": {
+        "layout_notes": "上下双区结合全球地图与模型流水线：上方分两行陈列 6 幅红蓝发散色阶的卫星与站点观测地图，下方以浅蓝编码框、淡粉迭代处理框与淡黄解码框构成从左到右的端到端天气预报架构。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "nature-2025-pmc12222024",
+      "meta": {
+        "title": "The pivot penalty in research",
+        "journal": "Nature",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "inter-soc",
+        "figure_type": "pipeline"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc12222024",
+        "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-025-09048-1/MediaObjects/41586_2025_9048_Fig1_HTML.png",
+        "doi": "https://doi.org/10.1038/s41586-025-09048-1",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12222024/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#F7C113",
+            "#7CAED3",
+            "#F37621",
+            "#4F8798",
+            "#A6B188"
+          ],
+          "accent": "#A12F2E",
+          "neutral": "#BFA796",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": true
+      },
+      "reference": {
+        "layout_notes": "上概念下分布的编辑级信息图：顶部横向排列色彩编码的期刊卡片并汇聚为水平研究向量条，对比小幅与大幅研究转向（余弦距离）；底部左右双柱状密度图分别呈现论文与专利的转向幅度分布。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "nature-2025-pmc12727508",
+      "meta": {
+        "title": "A fault-tolerant neutral-atom architecture for universal quantum computation",
+        "journal": "Nature",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "phys-eng",
+        "figure_type": "pipeline"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc12727508",
+        "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-025-09848-5/MediaObjects/41586_2025_9848_Fig1_HTML.png",
+        "doi": "https://doi.org/10.1038/s41586-025-09848-5",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12727508/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#294D76",
+            "#6E97C3",
+            "#A3BFDC",
+            "#F2AF89"
+          ],
+          "accent": "#8E0F1D",
+          "neutral": "#605D60",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": true
+      },
+      "reference": {
+        "layout_notes": "左架构右实验的多面板量子物理主图：左侧以细线框划分容错操作、存储/纠缠/读出阵列与底层机制，右侧串联光晶格读出流程、d=5 表面码阵列及蓝灰渐变误差曲线，用深酒红标示误差与物理熵节点。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "science-2026-pmc13322399",
+      "meta": {
+        "title": "A global map for introgressed structural variation and selection in humans",
+        "journal": "Science",
+        "journal_tier": "flagship",
+        "year": 2026,
+        "discipline": "inter-soc",
+        "figure_type": "characterization"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=science-2026-pmc13322399",
+        "image_hd": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13322399.1/nihms-2190982-f0001.webp",
+        "doi": "https://doi.org/10.1126/science.adz7518",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13322399/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#0072B4",
+            "#E18826",
+            "#BD3C2A",
+            "#208950",
+            "#7976B1",
+            "#6F9CAC"
+          ],
+          "accent": "#BD3C2A",
+          "neutral": "#94959C",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": false
+      },
+      "reference": {
+        "layout_notes": "上统计下全基因组的双层演化基因组图谱：上方左右分置六大人群 PCA 散点图与累积组装 Contig 阶梯曲线，下方双列排布 24 条人类染色体核型条带，并用高对比青、黄、绿三色标注缺失、插入与倒位变异。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "science-2025-pmc12288761",
+      "meta": {
+        "title": "Computational design of serine hydrolases",
+        "journal": "Science",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "bio-med",
+        "figure_type": "mechanism"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=science-2025-pmc12288761",
+        "image_hd": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12288761.1/nihms-2090701-f0002.webp",
+        "doi": "https://doi.org/10.1126/science.adu2454",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12288761/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#3073AC",
+            "#2AB0C0",
+            "#F9C82D",
+            "#F99179",
+            "#AAC32F"
+          ],
+          "accent": "#CD685E",
+          "neutral": "#8F8F8F",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": false
+      },
+      "reference": {
+        "layout_notes": "四层纵向递进的蛋白设计与催化机理图：依次呈现从左到右的 RFdiffusion 骨架生成、PLACER 活性位点构象集成、蓝箭头标注的电子转移催化循环，以及底部 4×2 圆角卡片对比天然酶与设计蛋白的预组织状态。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "science-2025-pmc13698566",
+      "meta": {
+        "title": "Bridging the pyridine-pyridazine synthesis gap by skeletal editing",
+        "journal": "Science",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "mat-chem",
+        "figure_type": "multipanel"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=science-2025-pmc13698566",
+        "image_hd": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13698566.1/nihms-2215399-f0001.webp",
+        "doi": "https://doi.org/10.1126/science.adx4762",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13698566/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#4E81E9",
+            "#B20103",
+            "#762E7A"
+          ],
+          "accent": "#B20103",
+          "neutral": "#828B9B",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": true
+      },
+      "reference": {
+        "layout_notes": "细灰线分隔的 2×2 四象限合成化学总览图：左上对比吡啶与哒嗪库占比鸿沟，右上展示代表性药物分子，下方两区并列碳-氮骨架编辑反应路径、390 nm 光催化条件与浅灰底关键中间体框。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "cell-2025-pmc12340670",
+      "meta": {
+        "title": "Norepinephrine-mediated slow vasomotion drives glymphatic clearance during sleep",
+        "journal": "Cell",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "bio-med",
+        "figure_type": "graphical-abstract"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=cell-2025-pmc12340670",
+        "image_hd": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867424013436-fx1_lrg.jpg",
+        "doi": "https://doi.org/10.1016/j.cell.2024.11.027",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12340670/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#026532",
+            "#229ABF",
+            "#90D4D7",
+            "#ED7C5B"
+          ],
+          "accent": "#C1494C",
+          "neutral": "#A7A8AC",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": false
+      },
+      "reference": {
+        "layout_notes": "左右镜像对照式双栏视觉摘要（清醒 vs NREM 睡眠）：顶部为极简矢量化小鼠状态插图，中部浅蓝绿方框内纵向叠加去甲肾上腺素波形、珊瑚红动脉脉动与血管周隙流向箭头，底部以冠状脑切片渐变箭头呼应脑脊液清除机制。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "cell-2025-pmc12790861",
+      "meta": {
+        "title": "A generative deep learning approach to de novo antibiotic design",
+        "journal": "Cell",
+        "journal_tier": "flagship",
+        "year": 2025,
+        "discipline": "bio-med",
+        "figure_type": "mechanism"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=cell-2025-pmc12790861",
+        "image_hd": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867425008554-gr1_lrg.jpg",
+        "doi": "https://doi.org/10.1016/j.cell.2025.07.033",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12790861/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#293371",
+            "#723E7E",
+            "#565891",
+            "#4786BB",
+            "#B69CBA"
+          ],
+          "accent": "#991A23",
+          "neutral": "#94908F",
+          "background": "#FFFFFF"
+        },
+        "colorblind_safe": false
+      },
+      "reference": {
+        "layout_notes": "A–G 七面板紫蓝同色系药物发现总览图：上方依次排列三段圆角流程框、分子片段化学空间散点图与预测分位数曲线，下方以纵向灰阶漏斗串联 4500 万片段筛选、命中排序、高亮紫边核心骨架及蓝紫渐变柱状图，少量暗红锚定已知抗生素对照。"
+      }
+    },
+    {
+      "schema_version": "1.0",
+      "id": "cell-2024-pmc10965243",
+      "meta": {
+        "title": "A versatile CRISPR-Cas13d platform for multiplexed transcriptomic regulation and metabolic engineering in primary human T cells",
+        "journal": "Cell",
+        "journal_tier": "flagship",
+        "year": 2024,
+        "discipline": "bio-med",
+        "figure_type": "graphical-abstract"
+      },
+      "links": {
+        "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=cell-2024-pmc10965243",
+        "image_hd": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867424001028-fx1_lrg.jpg",
+        "doi": "https://doi.org/10.1016/j.cell.2024.01.035",
+        "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10965243/"
+      },
+      "palette": {
+        "roles": {
+          "primary": [
+            "#216AAF",
+            "#1AA7E0",
+            "#DEE28C",
+            "#74B840"
+          ],
+          "accent": "#EE3F18",
+          "neutral": "#6F899D",
+          "background": "#F6F5F1"
+        },
+        "colorblind_safe": false
+      },
+      "reference": {
+        "layout_notes": "顶部钴蓝横幅统领的模块化圆角卡片视觉摘要：中左以橄榄黄双格卡片交代 Cas13d 仅切割 RNA 的机制，中右按 1→2 编号串联双载体构建，底部左右分置多基因敲低/热图/代谢重编程数据模块与绿色系 CAR-T 体内抗肿瘤验证。"
+      }
+    }
+  ]
+}

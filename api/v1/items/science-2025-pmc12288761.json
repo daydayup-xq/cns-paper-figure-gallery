@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "id": "science-2025-pmc12288761",
+  "meta": {
+    "title": "Computational design of serine hydrolases",
+    "journal": "Science",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "bio-med",
+    "figure_type": "mechanism"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=science-2025-pmc12288761",
+    "image_hd": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12288761.1/nihms-2090701-f0002.webp",
+    "doi": "https://doi.org/10.1126/science.adu2454",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12288761/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#3073AC",
+        "#2AB0C0",
+        "#F9C82D",
+        "#F99179",
+        "#AAC32F"
+      ],
+      "accent": "#CD685E",
+      "neutral": "#8F8F8F",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": false
+  },
+  "reference": {
+    "layout_notes": "四层纵向递进的蛋白设计与催化机理图：依次呈现从左到右的 RFdiffusion 骨架生成、PLACER 活性位点构象集成、蓝箭头标注的电子转移催化循环，以及底部 4×2 圆角卡片对比天然酶与设计蛋白的预组织状态。"
+  }
+}

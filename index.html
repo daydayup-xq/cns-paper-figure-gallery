@@ -12,7 +12,7 @@
 <meta property="og:image" content="https://daydayup-xq.github.io/cns-paper-figure-gallery/docs/banner.png">
 <link rel="canonical" href="https://daydayup-xq.github.io/cns-paper-figure-gallery/">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="stylesheet" href="assets/style.css?v=20261126e">
+<link rel="stylesheet" href="assets/style.css?v=20261127b">
 </head>
 <body>
 
@@ -131,21 +131,30 @@
       <div id="active-filter-tags" class="active-filter-tags"></div>
     </div>
 
-    <!-- Collapsible 2-Row Filter Matrix -->
+    <!-- Collapsible 3-Row Filter Matrix -->
     <div class="filter-matrix" id="filter-matrix">
       <div class="filter-row">
-        <span class="filter-label" data-i18n="fl.family">出版体系</span>
-        <div class="chips" id="family-chips" role="group" aria-label="family filter"></div>
-        <span class="filter-label sep" data-i18n="fl.tier">期刊级别</span>
-        <div class="chips" id="tier-chips" role="group" aria-label="tier filter"></div>
-        <span class="filter-label sep" data-i18n="fl.year">年份</span>
-        <div class="chips" id="year-chips" role="group" aria-label="year filter"></div>
+        <div class="filter-group">
+          <span class="filter-label" data-i18n="fl.family">出版体系</span>
+          <div class="chips" id="family-chips" role="group" aria-label="family filter"></div>
+        </div>
+        <div class="filter-group has-sep">
+          <span class="filter-label" data-i18n="fl.tier">期刊级别</span>
+          <div class="chips" id="tier-chips" role="group" aria-label="tier filter"></div>
+        </div>
+        <div class="filter-group has-sep">
+          <span class="filter-label" data-i18n="fl.year">年份</span>
+          <div class="chips" id="year-chips" role="group" aria-label="year filter"></div>
+        </div>
       </div>
 
       <div class="filter-row">
         <span class="filter-label" data-i18n="fl.discipline">学科方向</span>
         <div class="chips" id="discipline-chips" role="group" aria-label="discipline filter"></div>
-        <span class="filter-label sep" data-i18n="fl.pattern">主图类型</span>
+      </div>
+
+      <div class="filter-row">
+        <span class="filter-label" data-i18n="fl.pattern">主图类型</span>
         <div class="chips" id="pattern-chips" role="group" aria-label="pattern filter"></div>
       </div>
     </div>
@@ -235,7 +244,7 @@
 
         <div class="lb-palette-box">
           <div class="lb-palette-head">
-            <span data-i18n="lb.paletteTitle">提取主图配色（点击色块复制 HEX）</span>
+            <span id="lb-palette-title" data-i18n="lb.paletteTitle">提取主图配色（点击色块复制 HEX）</span>
             <div class="palette-export-btns">
               <button id="lb-copy-py" class="mini-btn" type="button">Python</button>
               <button id="lb-copy-r" class="mini-btn" type="button">R</button>
@@ -243,12 +252,14 @@
             </div>
           </div>
           <div id="lb-palette" class="lb-palette-swatches"></div>
+          <div id="lb-layout-notes" class="lb-layout-notes" hidden></div>
         </div>
 
         <div class="lb-actions">
           <a id="lb-view-image" class="ghost-btn" target="_blank" rel="noopener noreferrer" data-i18n="lb.viewImage">高清原图 ↗</a>
           <a id="lb-open-paper" class="primary-btn" target="_blank" rel="noopener noreferrer" data-i18n="lb.openPaper">DOI 官网 ↗</a>
           <a id="lb-open-pmc" class="ghost-btn" target="_blank" rel="noopener noreferrer" data-i18n="lb.openPmc">PMC 阅读 ↗</a>
+          <a id="lb-agent-json" class="ghost-btn agent-json-btn" target="_blank" rel="noopener noreferrer" hidden data-i18n="curated.agentJson">Agent JSON ↗</a>
           <button id="lb-copy-bib" class="ghost-btn" type="button" data-i18n="lb.copyBib">复制 BibTeX</button>
         </div>
       </div>
@@ -301,8 +312,8 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<script src="assets/i18n.js?v=20261126e"></script>
-<script src="assets/figures.js?v=20261126e"></script>
-<script src="assets/app.js?v=20261126e"></script>
+<script src="assets/i18n.js?v=20261127a"></script>
+<script src="assets/figures.js?v=20261127a"></script>
+<script src="assets/app.js?v=20261127a"></script>
 </body>
 </html>

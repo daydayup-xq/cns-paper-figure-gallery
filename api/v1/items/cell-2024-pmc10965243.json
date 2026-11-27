@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "id": "cell-2024-pmc10965243",
+  "meta": {
+    "title": "A versatile CRISPR-Cas13d platform for multiplexed transcriptomic regulation and metabolic engineering in primary human T cells",
+    "journal": "Cell",
+    "journal_tier": "flagship",
+    "year": 2024,
+    "discipline": "bio-med",
+    "figure_type": "graphical-abstract"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=cell-2024-pmc10965243",
+    "image_hd": "https://ars.els-cdn.com/content/image/1-s2.0-S0092867424001028-fx1_lrg.jpg",
+    "doi": "https://doi.org/10.1016/j.cell.2024.01.035",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10965243/"
+  },
+  "palette": {
+    "roles": {
+      "primary": [
+        "#216AAF",
+        "#1AA7E0",
+        "#DEE28C",
+        "#74B840"
+      ],
+      "accent": "#EE3F18",
+      "neutral": "#6F899D",
+      "background": "#F6F5F1"
+    },
+    "colorblind_safe": false
+  },
+  "reference": {
+    "layout_notes": "顶部钴蓝横幅统领的模块化圆角卡片视觉摘要：中左以橄榄黄双格卡片交代 Cas13d 仅切割 RNA 的机制，中右按 1→2 编号串联双载体构建，底部左右分置多基因敲低/热图/代谢重编程数据模块与绿色系 CAR-T 体内抗肿瘤验证。"
+  }
+}

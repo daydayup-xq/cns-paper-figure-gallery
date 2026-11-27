@@ -33,6 +33,7 @@ A searchable, multi-dimensional Figure 1 & Graphical Abstract gallery with extra
 
 [🌐 Live Gallery](https://daydayup-xq.github.io/cns-paper-figure-gallery/) ·
 [🎨 Color Palettes](#-scientific-color-palettes) ·
+[🤖 Static Agent API](#-static-agent-api-beta) ·
 [📊 Dataset Scale](#-dataset-scale) ·
 [🧭 Visual Patterns](#-visual-patterns) ·
 [🚀 Quick Start](#-quick-start) ·
@@ -151,6 +152,61 @@ scale_color_manual(values = palette)
 
 ---
 
+## 🤖 Static Agent API (Beta)
+
+To let scientific-plotting agents, CLI scripts, and external workflows consume visually verified CNS flagship palettes and structural layout references directly without a backend, the site publishes deterministic static JSON endpoints under `/api/v1/` (`schema_version: "1.0"`):
+
+| Endpoint | Purpose | Live Example |
+|---|---|---|
+| `api/v1/index.json` | Lightweight discovery index (`id`, `journal`, `year`, `discipline`, `figure_type`, `item_api_url`, `primary_colors`) | [`index.json`](https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/index.json) |
+| `api/v1/curated.json` | Full bundle containing all verified curated records in a single fetch | [`curated.json`](https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/curated.json) |
+| `api/v1/items/{id}.json` | Per-figure detail endpoint with paper metadata, HD image URL, semantic color roles, and layout notes | [`nature-2025-pmc11711098.json`](https://daydayup-xq.github.io/cns-paper-figure-gallery/api/v1/items/nature-2025-pmc11711098.json) |
+
+### Single-Item Payload Example
+
+```json
+{
+  "schema_version": "1.0",
+  "id": "nature-2025-pmc11711098",
+  "meta": {
+    "title": "Accurate predictions on small data with a tabular foundation model",
+    "journal": "Nature",
+    "journal_tier": "flagship",
+    "year": 2025,
+    "discipline": "ai-comp",
+    "figure_type": "pipeline"
+  },
+  "links": {
+    "gallery_page": "https://daydayup-xq.github.io/cns-paper-figure-gallery/#fig=nature-2025-pmc11711098",
+    "image_hd": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41586-024-08328-6/MediaObjects/41586_2024_8328_Fig1_HTML.png",
+    "doi": "https://doi.org/10.1038/s41586-024-08328-6",
+    "pmc": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11711098/"
+  },
+  "palette": {
+    "roles": {
+      "primary": ["#7BAFCD", "#FF9263", "#D5E0EF", "#DFEEE8"],
+      "accent": "#FF9263",
+      "neutral": "#7F7F7F",
+      "background": "#FFFFFF"
+    },
+    "colorblind_safe": true
+  },
+  "reference": {
+    "layout_notes": "上下两段式 AI 框架总览：上方左右并列浅蓝与浅薄荷圆角分区对照预训练与实测推理，下方按从左到右数据流展示表格输入、2D TabPFN 注意力层与预测分布直方图，以珊瑚橙高亮待预测目标条目。"
+  }
+}
+```
+
+- **Backward-Compatible Dual-Layer Palettes**: Unverified entries continue displaying auto-extracted `palette` swatches; verified entries carrying `palette_curated` (`status: "verified"`) display only curated role-ordered colors on gallery cards alongside a `✨ Curated` badge and direct `Agent JSON ↗` link.
+- **Deterministic Regeneration**: After adding or editing `palette_curated` in `data/figures.json`, run:
+
+```bash
+python -X utf8 scripts/build_agent_api.py
+python -X utf8 scripts/validate_gallery.py
+```
+
+---
+
 ## 🚀 Quick Start
 
 Browse online: **[Live GitHub Pages Gallery](https://daydayup-xq.github.io/cns-paper-figure-gallery/)**
@@ -177,6 +233,10 @@ python -X utf8 scripts/validate_gallery.py
 ├── index.html                  # Main gallery (top filter bar, multi-view gallery, Lightbox, Palette Studio, Support modal)
 ├── support.html                # Bilingual standalone support & sponsor partner page
 ├── README.md / README.en.md    # Chinese & English documentation
+├── api/v1/
+│   ├── index.json              # Lightweight curated Agent discovery index
+│   ├── curated.json            # Full curated Agent dataset bundle
+│   └── items/{id}.json         # Per-figure Agent JSON (metadata, role palette, layout notes)
 ├── assets/
 │   ├── style.css / app.js      # Stylesheet & interactive client logic
 │   ├── i18n.js                 # Bilingual (ZH / EN) localization dictionary
@@ -185,11 +245,12 @@ python -X utf8 scripts/validate_gallery.py
 │   └── wechat-pay.jpg          # Author's WeChat Pay QR code
 ├── data/
 │   ├── journals.json           # 68 curated CNS journal definitions & discipline mappings
-│   └── figures.json            # Authoritative 5,270-figure metadata index
+│   └── figures.json            # Authoritative 5,270-figure metadata index (with optional palette_curated)
 ├── docs/                       # Hero poster & sponsor partner banners
 ├── scripts/
 │   ├── crawl_cns_figures.py    # OpenAlex + NCBI E-Utilities + official CDN harvesting pipeline
-│   └── validate_gallery.py     # Integrity, dimension, palette & static-asset validator
+│   ├── build_agent_api.py      # Deterministic generator for /api/v1/ and assets/figures.js
+│   └── validate_gallery.py     # Integrity, Agent API, dimension, palette & static-asset validator
 └── .github/workflows/          # Pages deployment & monthly auto-update workflows
 ```
 
